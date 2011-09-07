@@ -1,0 +1,28 @@
+C:\Documents and Settings\ChekunovaMV\Рабочий стол\Оценка\Office\Office\bin\Release\Office.exe.config
+C:\Documents and Settings\ChekunovaMV\Рабочий стол\Оценка\Office\Office\bin\Release\Office.exe
+C:\Documents and Settings\ChekunovaMV\Рабочий стол\Оценка\Office\Office\bin\Release\Office.pdb
+C:\Documents and Settings\ChekunovaMV\Рабочий стол\Оценка\Office\Office\obj\x86\Release\ResolveAssemblyReference.cache
+C:\Documents and Settings\ChekunovaMV\Рабочий стол\Оценка\Office\Office\obj\x86\Release\Office.BlanksForm.resources
+C:\Documents and Settings\ChekunovaMV\Рабочий стол\Оценка\Office\Office\obj\x86\Release\Office.ListsZnakForm.resources
+C:\Documents and Settings\ChekunovaMV\Рабочий стол\Оценка\Office\Office\obj\x86\Release\Office.MenuForm.resources
+C:\Documents and Settings\ChekunovaMV\Рабочий стол\Оценка\Office\Office\obj\x86\Release\Office.Properties.Resources.resources
+C:\Documents and Settings\ChekunovaMV\Рабочий стол\Оценка\Office\Office\obj\x86\Release\Office.OcencaForm.resources
+C:\Documents and Settings\ChekunovaMV\Рабочий стол\Оценка\Office\Office\obj\x86\Release\GenerateResource.read.1.tlog
+C:\Documents and Settings\ChekunovaMV\Рабочий стол\Оценка\Office\Office\obj\x86\Release\GenerateResource.write.1.tlog
+C:\Documents and Settings\ChekunovaMV\Рабочий стол\Оценка\Office\Office\obj\x86\Release\Office.exe
+C:\Documents and Settings\ChekunovaMV\Рабочий стол\Оценка\Office\Office\obj\x86\Release\Office.pdb
+D:\vs2010\OFFICE\Office\bin\Release\Office.exe.config
+D:\vs2010\OFFICE\Office\obj\x86\Release\Office.exe
+D:\vs2010\OFFICE\Office\obj\x86\Release\Office.pdb
+D:\vs2010\OFFICE\Office\bin\Release\Office.exe
+D:\vs2010\OFFICE\Office\bin\Release\Office.pdb
+D:\vs2010\OFFICE\Office\obj\x86\Release\ResolveAssemblyReference.cache
+D:\vs2010\OFFICE\Office\obj\x86\Release\Office.BlanksForm.resources
+D:\vs2010\OFFICE\Office\obj\x86\Release\Office.ListsZnakForm.resources
+D:\vs2010\OFFICE\Office\obj\x86\Release\Office.MenuForm.resources
+D:\vs2010\OFFICE\Office\obj\x86\Release\Office.Properties.Resources.resources
+D:\vs2010\OFFICE\Office\obj\x86\Release\Office.OcencaForm.resources
+D:\vs2010\OFFICE\Office\obj\x86\Release\GenerateResource-ResGen.read.1.tlog
+D:\vs2010\OFFICE\Office\obj\x86\Release\GenerateResource.read.1.tlog
+D:\vs2010\OFFICE\Office\obj\x86\Release\GenerateResource-ResGen.write.1.tlog
+D:\vs2010\OFFICE\Office\obj\x86\Release\GenerateResource.write.1.tlog

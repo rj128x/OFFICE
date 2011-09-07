@@ -1,0 +1,11 @@
+D:\vs2010\Office\Office\bin\Debug\Office.exe
+D:\vs2010\Office\Office\bin\Debug\Office.pdb
+D:\vs2010\Office\Office\obj\x86\Debug\ResolveAssemblyReference.cache
+D:\vs2010\Office\Office\obj\x86\Debug\Office.Properties.Resources.resources
+D:\vs2010\Office\Office\obj\x86\Debug\GenerateResource.read.1.tlog
+D:\vs2010\Office\Office\obj\x86\Debug\GenerateResource.write.1.tlog
+D:\vs2010\Office\Office\obj\x86\Debug\Office.exe
+D:\vs2010\Office\Office\obj\x86\Debug\Office.pdb
+D:\vs2010\Office\Office\obj\x86\Debug\Office.BlanksForm.resources
+D:\vs2010\Office\Office\obj\x86\Debug\Office.MenuForm.resources
+D:\vs2010\Office\Office\obj\x86\Debug\Office.ListsZnakForm.resources
