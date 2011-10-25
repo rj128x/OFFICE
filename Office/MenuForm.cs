@@ -7,7 +7,7 @@ namespace Office
 	{
 		protected BlanksForm blanksForm;
 		protected ListsZnakForm listsZnakForm;
-        protected OcencaForm ocencaForm;
+        protected ProtokolForm ocencaForm;
 		public MenuForm() {
 			InitializeComponent();
 		}
@@ -31,7 +31,7 @@ namespace Office
         {
             if (ocencaForm == null)
             {
-                ocencaForm = new OcencaForm();
+                ocencaForm = new ProtokolForm();
             }
             ocencaForm.ShowDialog();
         }

@@ -1,6 +1,6 @@
 ﻿namespace Office
 {
-    partial class OcencaForm
+    partial class ProtokolForm
 	{
 		/// <summary>
 		/// Required designer variable.

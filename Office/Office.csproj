@@ -76,12 +76,12 @@
     <Compile Include="Shared\Logger.cs" />
     <Compile Include="Shared\ProcessBlanks.cs" />
     <Compile Include="Shared\InstrFolders.cs" />
-    <Compile Include="Shared\Ocenca.cs" />
-    <Compile Include="OcencaForm.cs">
+    <Compile Include="Shared\Protokols.cs" />
+    <Compile Include="ProtokolForm.cs">
       <SubType>Form</SubType>
     </Compile>
-    <Compile Include="OcencaForm.Designer.cs">
-      <DependentUpon>OcencaForm.cs</DependentUpon>
+    <Compile Include="ProtokolForm.Designer.cs">
+      <DependentUpon>ProtokolForm.cs</DependentUpon>
     </Compile>
     <EmbeddedResource Include="BlanksForm.resx">
       <DependentUpon>BlanksForm.cs</DependentUpon>
@@ -102,8 +102,8 @@
       <DependentUpon>Resources.resx</DependentUpon>
       <DesignTime>True</DesignTime>
     </Compile>
-    <EmbeddedResource Include="OcencaForm.resx">
-      <DependentUpon>OcencaForm.cs</DependentUpon>
+    <EmbeddedResource Include="ProtokolForm.resx">
+      <DependentUpon>ProtokolForm.cs</DependentUpon>
     </EmbeddedResource>
     <None Include="app.config" />
     <None Include="Properties\Settings.settings">

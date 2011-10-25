@@ -4,9 +4,9 @@ using Office.Shared;
 
 namespace Office
 {
-    public partial class OcencaForm : Form
+    public partial class ProtokolForm : Form
 	{
-		public OcencaForm() {
+		public ProtokolForm() {
 			InitializeComponent();
 			Logger.addFunc(log);
 		}
@@ -15,7 +15,7 @@ namespace Office
 		}
 
 		private void btnRun_Click(object sender, EventArgs e) {
-           Ocenca ocenca = new Ocenca(txtFile.Text, chbVisible.Checked);
+           Protokols ocenca = new Protokols(txtFile.Text, chbVisible.Checked);
 		   ocenca.processFile();
 		}
 
