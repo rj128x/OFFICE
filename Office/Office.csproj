@@ -83,6 +83,7 @@
     <Compile Include="ProtokolForm.Designer.cs">
       <DependentUpon>ProtokolForm.cs</DependentUpon>
     </Compile>
+    <Compile Include="Shared\ProtokolsOcher.cs" />
     <EmbeddedResource Include="BlanksForm.resx">
       <DependentUpon>BlanksForm.cs</DependentUpon>
     </EmbeddedResource>

@@ -3,16 +3,18 @@ using Microsoft.Office.Interop.Excel;
 
 namespace Office.Shared
 {
-	class Protokols
+	class ProtokolsOcher
 	{
 		protected string fileName;
 		protected int oznakomLastString=49;
 		protected Application app=new Application();
 		protected bool visible;
-		public Protokols(string fileName, bool visible) {
+		public ProtokolsOcher(string fileName, bool visible) {
 			this.fileName = fileName;
 			this.visible = visible;
 		}
+
+
 		public void processFile() {
 			app.Visible = visible;
 			Workbook wb=app.Workbooks.Open(fileName, ReadOnly: true);
@@ -32,7 +34,7 @@ namespace Office.Shared
 				string group=wsPeople.Cells[5][rowIndex].Value.ToString();
 				string dolzn=wsPeople.Cells[7][rowIndex].Value.ToString();
 
-				string blank = wsPeople.Cells[8][rowIndex].Value;
+				string blank = wsPeople.Cells[9][rowIndex].Value;
 				Logger.log(name);
 				wsBlank = wb.Worksheets[blank];
 
@@ -41,11 +43,12 @@ namespace Office.Shared
 				int len = shortName.Length < 30 ? shortName.Length : 30;
 				ws.Name = String.Format("{0}", shortName.Substring(0, len));
 
-				ws.Cells[3][15].Value = name;
-				ws.Cells[3][17].Value = dolzn;
-				ws.Cells[3][20].Value = group;
-				ws.Cells[3][27].Value = group;
-				ws.Cells[9][39].Value = String.Format("/{0}/", shortName);
+				ws.Cells[3][13].Value = name;
+				ws.Cells[3][15].Value = dolzn;
+				ws.Cells[3][31].Value = dolzn;
+				/*ws.Cells[3][18].Value = group;
+				ws.Cells[3][29].Value = group;*/
+				ws.Cells[9][44].Value = String.Format("/{0}/", shortName);
 
 				System.Windows.Forms.Application.DoEvents();
 			}
@@ -53,8 +56,6 @@ namespace Office.Shared
 			app.Visible = true;
 		}
 
-		
-		
 		protected bool isNeed(Worksheet sheet, int row, int col) {
 			object val=sheet.Cells[col][row].Value;
 			return val == null ? false : val.ToString().ToUpper().Equals("V");

@@ -23,6 +23,11 @@ namespace Office
 			if (dlgFile.ShowDialog() == System.Windows.Forms.DialogResult.OK) {
 				txtFile.Text=dlgFile.FileName;
 			}
+		}
+
+		private void button1_Click(object sender, EventArgs e) {
+			ProtokolsOcher ocenca = new ProtokolsOcher(txtFile.Text, chbVisible.Checked);
+			ocenca.processFile();
 		}        		
 	}
 }
