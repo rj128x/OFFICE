@@ -45,7 +45,7 @@ namespace Office.Shared
 
 				ws.Cells[3][13].Value = name;
 				ws.Cells[3][15].Value = dolzn;
-				ws.Cells[3][31].Value = dolzn;
+				ws.Cells[3][31].Value = String.Format("Оперативного персонала ({0})",dolzn);
 				/*ws.Cells[3][18].Value = group;
 				ws.Cells[3][29].Value = group;*/
 				ws.Cells[9][44].Value = String.Format("/{0}/", shortName);

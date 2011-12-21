@@ -57,6 +57,7 @@ namespace Office.Shared
 							removeDoljn(ws, "Зам.нач.ОС");
 							removeDoljn(ws, "НСС");
 							removeDoljn(ws, "НС");
+							removeDoljn(ws, "Рук. гр. режимов");
 						}
 						if (!dem) {
 							removeDoljn(ws, "ДЭМ");
@@ -68,12 +69,12 @@ namespace Office.Shared
 							removeDoljn(ws, "МГ");
 						}
 						if (!inj) {
-							removeDoljn(ws, "Инженер");
+							removeDoljn(ws, "инженер");
 						}
 						if (!other) {
 							removeDoljn(ws, "техник");
-							removeDoljn(ws, "гидролог");
-							removeDoljn(ws, "специалист");
+							removeDoljn(ws, "инженер по рынку");
+							removeDoljn(ws, "инженер-гидролог");
 						}
 						refreshList(ws);
 					}
