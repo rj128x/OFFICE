@@ -24,7 +24,7 @@ namespace Office.Shared
 			Worksheet newWS=newWB.Worksheets.Add();
 
 
-			for (int rowIndex=1; rowIndex <= 41; rowIndex++) {
+			for (int rowIndex=2; rowIndex <= 42; rowIndex++) {
 				string surname=wsPeople.Cells[1][rowIndex].Value.ToString();
 				string firstName=wsPeople.Cells[2][rowIndex].Value.ToString();
 				string secName=wsPeople.Cells[3][rowIndex].Value.ToString();
@@ -33,8 +33,9 @@ namespace Office.Shared
 				string shortName=String.Format("{0} {1}. {2}.", surname, firstName.Substring(0, 1), secName.Substring(0, 1));
 				string group=wsPeople.Cells[5][rowIndex].Value.ToString();
 				string dolzn=wsPeople.Cells[7][rowIndex].Value.ToString();
+				string categ=wsPeople.Cells[9][rowIndex].Value.ToString();
 
-				string blank = wsPeople.Cells[9][rowIndex].Value;
+				string blank = wsPeople.Cells[8][rowIndex].Value+"_Очередной";
 				Logger.log(name);
 				wsBlank = wb.Worksheets[blank];
 
@@ -43,12 +44,12 @@ namespace Office.Shared
 				int len = shortName.Length < 30 ? shortName.Length : 30;
 				ws.Name = String.Format("{0}", shortName.Substring(0, len));
 
-				ws.Cells[3][13].Value = name;
-				ws.Cells[3][15].Value = dolzn;
-				ws.Cells[3][31].Value = String.Format("Оперативного персонала ({0})",dolzn);
+				ws.Cells[3][14].Value = name;
+				ws.Cells[3][16].Value = dolzn;
+				ws.Cells[3][32].Value = String.Format("{1} ({0})",dolzn,categ);
 				/*ws.Cells[3][18].Value = group;
 				ws.Cells[3][29].Value = group;*/
-				ws.Cells[9][44].Value = String.Format("/{0}/", shortName);
+				ws.Cells[9][46].Value = String.Format("/{0}/", shortName);
 
 				System.Windows.Forms.Application.DoEvents();
 			}
