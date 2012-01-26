@@ -53,8 +53,8 @@ namespace Office.Shared
 				first.Columns.Add();
 				first.AutoFormat(ApplyBorders: false, ApplyShading: false, ApplyFont: false, ApplyColor: false, ApplyHeadingRows: false,
 				ApplyLastRow: false, ApplyFirstColumn: false, AutoFit: true, ApplyLastColumn: false);
-				first.Rows[1].Cells[1].Range.Text = "Типовой бланк переключений";
-				first.Rows[1].Cells[2].Range.Text = "Утверждаю\nГлавный инженер филиала\nОАО \"РусГидро\" - \"Воткинская ГЭС\"\n__________________А.П.Деев\n\"____\"_____________2011г.";
+				first.Rows[1].Cells[1].Range.Text = "Типовой бланк переключений\n№"+getNumber(fileName);
+				first.Rows[1].Cells[2].Range.Text = "Утверждаю\nГлавный инженер филиала\nОАО \"РусГидро\" - \"Воткинская ГЭС\"\n__________________А.П.Деев\n\"____\"_____________2012г.";
 				first.AutoFitBehavior(WdAutoFitBehavior.wdAutoFitWindow);
 
 				Table last=doc.Range().Tables[doc.Range().Tables.Count];
@@ -67,9 +67,9 @@ namespace Office.Shared
 				last.AutoFormat(ApplyBorders: false, ApplyShading: false, ApplyFont: false, ApplyColor: false, ApplyHeadingRows: false,
 				ApplyLastRow: false, ApplyFirstColumn: false, AutoFit: true, ApplyLastColumn: false);
 
-				last.Rows[1].Cells[1].Range.Text = "Зам. начальника СТСУ";
+				last.Rows[1].Cells[1].Range.Text = "Начальник СТСУ";
 				last.Rows[1].Cells[2].Range.Text = "_____________________";
-				last.Rows[1].Cells[3].Range.Text = "Кузнецов А.И.";
+				last.Rows[1].Cells[3].Range.Text = "Кочеев Н.Н.";
 				last.Rows[2].Cells[1].Range.Text = "Начальник ОС";
 				last.Rows[2].Cells[2].Range.Text = "_____________________";
 				last.Rows[2].Cells[3].Range.Text = "Цирлин С.Л.";
@@ -202,21 +202,26 @@ namespace Office.Shared
 			}
 		}
 
-		protected void addFooter(string fileName,Document doc) {
-			int number=0;
+		protected string getNumber(string fileName) {
+			string number="";
 
 			try {
 				string[] fns=fileName.Split("\\".ToCharArray());
 				string fn=fns[fns.Length - 1];
-				fns = fn.Split(" ".ToCharArray());
+				char[] separ= { ' ', '-', };
+				fns = fn.Split(separ);
 				fn = fns[0];
-				bool ok=Int32.TryParse(fn, out number);
-				if (!ok) {
-					number = 0;
-				}
+				number = fns[0];
 			} catch {
-				number = 0;
 			}
+			return number;
+		}
+
+		protected void addFooter(string fileName,Document doc) {
+			string number=getNumber(fileName);
+
+			Range range1=doc.Sections.First.Headers[WdHeaderFooterIndex.wdHeaderFooterPrimary].Range;
+			range1.Text = "";
 			
 			Range range=doc.Sections.First.Footers[WdHeaderFooterIndex.wdHeaderFooterPrimary].Range;
 			range.Text = "";
@@ -224,7 +229,7 @@ namespace Office.Shared
 			range.Select();
 			range.Fields.Add(app.Selection.Range, Type: WdFieldType.wdFieldPage);
 
-			if (number > 0) {
+			if (number.Length > 0) {
 				range.InsertBefore(number.ToString() + "-");
 			}
 			range.ParagraphFormat.Alignment = WdParagraphAlignment.wdAlignParagraphRight;
