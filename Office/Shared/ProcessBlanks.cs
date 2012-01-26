@@ -44,7 +44,7 @@ namespace Office.Shared
 			try {
 				doc = app.Documents.Open(fileName, Visible: true, ReadOnly: false);
 				doc.Select();
-
+				
 				int x=doc.Range().Tables.Count;
 
 				Table first=doc.Range().Tables[1];
@@ -53,9 +53,12 @@ namespace Office.Shared
 				first.Columns.Add();
 				first.AutoFormat(ApplyBorders: false, ApplyShading: false, ApplyFont: false, ApplyColor: false, ApplyHeadingRows: false,
 				ApplyLastRow: false, ApplyFirstColumn: false, AutoFit: true, ApplyLastColumn: false);
-				first.Rows[1].Cells[1].Range.Text = "Типовой бланк переключений\n№"+getNumber(fileName);
+
+				
+				first.Rows[1].Cells[1].Range.Text="";
 				first.Rows[1].Cells[2].Range.Text = "Утверждаю\nГлавный инженер филиала\nОАО \"РусГидро\" - \"Воткинская ГЭС\"\n__________________А.П.Деев\n\"____\"_____________2012г.";
 				first.AutoFitBehavior(WdAutoFitBehavior.wdAutoFitWindow);
+			
 
 				Table last=doc.Range().Tables[doc.Range().Tables.Count];
 				resetTable(last);
@@ -84,7 +87,7 @@ namespace Office.Shared
 				//replaceSpaces(last);
 
 				replaceSpaces(doc);
-				addFooter(fileName, doc);
+				addFooter(fileName, doc,true);
 
 				Logger.log(fileName);
 				(doc as _Document).Close(SaveChanges: true);
@@ -158,7 +161,7 @@ namespace Office.Shared
 
 
 				replaceSpaces(doc);
-				addFooter(fileName, doc);
+				addFooter(fileName, doc,false);
 
 				
 				Logger.log(fileName);
@@ -217,21 +220,35 @@ namespace Office.Shared
 			return number;
 		}
 
-		protected void addFooter(string fileName,Document doc) {
+
+
+		protected void addFooter(string fileName,Document doc, bool addTip) {
 			string number=getNumber(fileName);
 
 			Range range1=doc.Sections.First.Headers[WdHeaderFooterIndex.wdHeaderFooterPrimary].Range;
 			range1.Text = "";
+			if (addTip) {
+				range1.Font.Reset();
+				range1.Font.Name = "Times New Roman";
+				range1.Font.Size = 14;
+				range1.ParagraphFormat.Alignment = WdParagraphAlignment.wdAlignParagraphCenter;
+				range1.ParagraphFormat.Space15();
+				range1.Font.Bold = 1;
+				range1.Text = "Типовой бланк переключений №" + number;
+			}
 			
 			Range range=doc.Sections.First.Footers[WdHeaderFooterIndex.wdHeaderFooterPrimary].Range;
 			range.Text = "";
 			range.Font.Size = 12;
+			range.ParagraphFormat.Alignment = WdParagraphAlignment.wdAlignParagraphRight;
 			range.Select();
+
 			range.Fields.Add(app.Selection.Range, Type: WdFieldType.wdFieldPage);
 
-			if (number.Length > 0) {
-				range.InsertBefore(number.ToString() + "-");
-			}
+				if (number.Length > 0) {
+					range.InsertBefore(number.ToString() + "     -");
+					range.InsertAfter("-");
+				}
 			range.ParagraphFormat.Alignment = WdParagraphAlignment.wdAlignParagraphRight;
 		}
 	}
