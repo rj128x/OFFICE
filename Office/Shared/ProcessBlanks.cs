@@ -55,7 +55,7 @@ namespace Office.Shared
 				ApplyLastRow: false, ApplyFirstColumn: false, AutoFit: true, ApplyLastColumn: false);
 
 				
-				first.Rows[1].Cells[1].Range.Text="";
+				first.Rows[1].Cells[1].Range.Text="Типовой бланк переключений\n №" + getNumber(fileName);
 				first.Rows[1].Cells[2].Range.Text = "Утверждаю\nГлавный инженер филиала\nОАО \"РусГидро\" - \"Воткинская ГЭС\"\n__________________А.П.Деев\n\"____\"_____________2012г.";
 				first.AutoFitBehavior(WdAutoFitBehavior.wdAutoFitWindow);
 			
@@ -227,15 +227,6 @@ namespace Office.Shared
 
 			Range range1=doc.Sections.First.Headers[WdHeaderFooterIndex.wdHeaderFooterPrimary].Range;
 			range1.Text = "";
-			if (addTip) {
-				range1.Font.Reset();
-				range1.Font.Name = "Times New Roman";
-				range1.Font.Size = 14;
-				range1.ParagraphFormat.Alignment = WdParagraphAlignment.wdAlignParagraphCenter;
-				range1.ParagraphFormat.Space15();
-				range1.Font.Bold = 1;
-				range1.Text = "Типовой бланк переключений №" + number;
-			}
 			
 			Range range=doc.Sections.First.Footers[WdHeaderFooterIndex.wdHeaderFooterPrimary].Range;
 			range.Text = "";
