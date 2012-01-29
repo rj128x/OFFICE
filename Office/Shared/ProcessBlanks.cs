@@ -45,7 +45,7 @@ namespace Office.Shared
 			int cntNotNull=0;
 
 			Paragraph last=doc.Paragraphs.Last;
-			while (cntNotNull < 8) {
+			while (cntNotNull < 10) {
 				if (last.Range.Text.Trim().Length > 3) {
 					//Logger.log(last.Range.Text);
 					cntNotNull++;
