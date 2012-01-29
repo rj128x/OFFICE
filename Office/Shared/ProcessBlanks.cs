@@ -44,6 +44,13 @@ namespace Office.Shared
 			try {
 				doc = app.Documents.Open(fileName, Visible: true, ReadOnly: false);
 				doc.Select();
+
+				doc.PageSetup.LeftMargin = 50;
+				doc.PageSetup.TopMargin = 30;
+				doc.PageSetup.BottomMargin = 30;
+				doc.PageSetup.RightMargin = 30;
+				doc.PageSetup.FooterDistance = 30;
+				doc.PageSetup.HeaderDistance = 0;
 				
 				int x=doc.Range().Tables.Count;
 
@@ -225,8 +232,11 @@ namespace Office.Shared
 		protected void addFooter(string fileName,Document doc, bool addTip) {
 			string number=getNumber(fileName);
 
+
 			Range range1=doc.Sections.First.Headers[WdHeaderFooterIndex.wdHeaderFooterPrimary].Range;
 			range1.Text = "";
+			range1.Select();
+			range1.Delete();
 			
 			Range range=doc.Sections.First.Footers[WdHeaderFooterIndex.wdHeaderFooterPrimary].Range;
 			range.Text = "";
