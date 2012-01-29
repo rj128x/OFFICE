@@ -40,12 +40,30 @@ namespace Office.Shared
 			return true;
 		}
 
+		protected void podpis(Document doc) {
+			int count=doc.Paragraphs.Count;
+			int cntNotNull=0;
+
+			Paragraph last=doc.Paragraphs.Last;
+			while (cntNotNull < 8) {
+				if (last.Range.Text.Trim().Length > 3) {
+					//Logger.log(last.Range.Text);
+					cntNotNull++;
+				}
+				last.Format.KeepWithNext = -1;
+				last.Format.KeepTogether = -1;
+				last = last.Previous();
+			}
+			
+		}
+
 		protected bool createTipBlank(string fileName) {
+			doc = null;
 			try {
 				doc = app.Documents.Open(fileName, Visible: true, ReadOnly: false);
 				doc.Select();
 
-				doc.PageSetup.LeftMargin = 50;
+				doc.PageSetup.LeftMargin = 60;
 				doc.PageSetup.TopMargin = 30;
 				doc.PageSetup.BottomMargin = 30;
 				doc.PageSetup.RightMargin = 30;
@@ -95,11 +113,12 @@ namespace Office.Shared
 
 				replaceSpaces(doc);
 				addFooter(fileName, doc,true);
-
+				podpis(doc);
 				Logger.log(fileName);
 				(doc as _Document).Close(SaveChanges: true);
 				return true;
 			} catch (Exception e) {
+				try { (doc as _Document).Close(SaveChanges: false); } catch { }
 				Logger.log("ERROR: " + fileName);
 				Logger.log("--" + e.Message);
 				return false;
@@ -111,6 +130,13 @@ namespace Office.Shared
 			try {
 				doc = app.Documents.Open(fileName, Visible: true, ReadOnly: false);
 				doc.Select();
+
+				doc.PageSetup.LeftMargin = 60;
+				doc.PageSetup.TopMargin = 30;
+				doc.PageSetup.BottomMargin = 30;
+				doc.PageSetup.RightMargin = 30;
+				doc.PageSetup.FooterDistance = 30;
+				doc.PageSetup.HeaderDistance = 0;
 
 				int x=doc.Range().Tables.Count;
 
@@ -169,12 +195,13 @@ namespace Office.Shared
 
 				replaceSpaces(doc);
 				addFooter(fileName, doc,false);
-
+				podpis(doc);
 				
 				Logger.log(fileName);
 				(doc as _Document).Close(SaveChanges: true);
 				return true;
 			} catch (Exception e) {
+				try { (doc as _Document).Close(SaveChanges: false); } catch { }
 				Logger.log("ERROR: " + fileName);
 				Logger.log("--" + e.Message);
 				return false;
