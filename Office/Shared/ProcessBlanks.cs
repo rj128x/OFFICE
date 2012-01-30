@@ -180,31 +180,32 @@ namespace Office.Shared
 				tab.Rows[2].Cells[1].Range.ParagraphFormat.Alignment = WdParagraphAlignment.wdAlignParagraphRight;
 
 				tab.Rows[2].Cells[2].Range.Text = "______";
-				tab.Rows[2].Cells[2].Range.ParagraphFormat.Alignment = WdParagraphAlignment.wdAlignParagraphRight;				
-
+				tab.Rows[2].Cells[2].Range.ParagraphFormat.Alignment = WdParagraphAlignment.wdAlignParagraphRight;
+				tab.Rows[2].Cells[2].Range.Font.Color = WdColor.wdColorWhite;
+		
 
 				tab.Rows[2].Cells[3].Range.Text = "/" + getNumber(fileName);
 				tab.Rows[2].Cells[3].Range.ParagraphFormat.Alignment = WdParagraphAlignment.wdAlignParagraphLeft;
-				tab.Rows[2].Cells[3].Range.Font.Underline = WdUnderline.wdUnderlineSingle;
+
+				tab.Rows[2].Borders[WdBorderType.wdBorderBottom].LineStyle = WdLineStyle.wdLineStyleSingle;
 				
 				tab.Rows[2].Cells[1].PreferredWidthType = WdPreferredWidthType.wdPreferredWidthAuto;
 				tab.Rows[2].Cells[2].PreferredWidthType = WdPreferredWidthType.wdPreferredWidthAuto;
 				tab.Rows[2].Cells[3].PreferredWidthType = WdPreferredWidthType.wdPreferredWidthAuto;
 				tab.Rows[2].Cells[4].PreferredWidthType = WdPreferredWidthType.wdPreferredWidthAuto;
 
+
 				tab.Rows[3].Cells[1].Merge(tab.Rows[3].Cells[2]);
-				tab.Rows[3].Cells[2].Merge(tab.Rows[3].Cells[3]);
-				tab.Rows[3].Cells[1].Range.Text = "Начало";
-				tab.Rows[3].Cells[2].Range.Text = "____час____мин";
-				tab.Rows[3].Cells[1].Range.ParagraphFormat.Alignment = WdParagraphAlignment.wdAlignParagraphRight;
-				tab.Rows[3].Cells[2].Range.ParagraphFormat.Alignment = WdParagraphAlignment.wdAlignParagraphLeft;
+				tab.Rows[3].Cells[1].Merge(tab.Rows[3].Cells[2]);
+				tab.Rows[3].Cells[1].Merge(tab.Rows[3].Cells[2]);
+				tab.Rows[3].Cells[1].Range.Text = "Начало ____час____мин";
+				tab.Rows[3].Cells[1].Range.ParagraphFormat.Alignment = WdParagraphAlignment.wdAlignParagraphCenter;
 
 				tab.Rows[4].Cells[1].Merge(tab.Rows[4].Cells[2]);
-				tab.Rows[4].Cells[2].Merge(tab.Rows[4].Cells[3]);
-				tab.Rows[4].Cells[1].Range.Text = "Конец";
-				tab.Rows[4].Cells[2].Range.Text = "____час____мин";
-				tab.Rows[4].Cells[1].Range.ParagraphFormat.Alignment = WdParagraphAlignment.wdAlignParagraphRight;
-				tab.Rows[4].Cells[2].Range.ParagraphFormat.Alignment = WdParagraphAlignment.wdAlignParagraphLeft;
+				tab.Rows[4].Cells[1].Merge(tab.Rows[4].Cells[2]);
+				tab.Rows[4].Cells[1].Merge(tab.Rows[4].Cells[2]);
+				tab.Rows[4].Cells[1].Range.Text = "Конец ____час____мин";
+				tab.Rows[4].Cells[1].Range.ParagraphFormat.Alignment = WdParagraphAlignment.wdAlignParagraphCenter;
 
 
 				/*tab.Rows[2].Cells[1].PreferredWidth = 20;
