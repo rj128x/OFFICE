@@ -156,44 +156,60 @@ namespace Office.Shared
 				first.Columns.Add();
 				first.AutoFormat(ApplyBorders: false, ApplyShading: false, ApplyFont: false, ApplyColor: false, ApplyHeadingRows: false,
 				ApplyLastRow: false, ApplyFirstColumn: false, AutoFit: false, ApplyLastColumn: false);
+				first.Rows[1].Cells[1].Range.ParagraphFormat.Alignment = WdParagraphAlignment.wdAlignParagraphCenter;
 				
-				Table tab =first.Rows[1].Cells[1].Range.Tables.Add(first.Rows[1].Cells[1].Range, 1, 3);
+				Table tab =first.Rows[1].Cells[1].Range.Tables.Add(first.Rows[1].Cells[1].Range, 1, 4);
 				tab.Rows.Add();
 				tab.Rows.Add();
-							
+				tab.Rows.Add();
 				
 
+				tab.Rows[1].Cells[1].Merge(tab.Rows[1].Cells[2]);
 				tab.Rows[1].Cells[1].Merge(tab.Rows[1].Cells[2]);
 				tab.Rows[1].Cells[1].Merge(tab.Rows[1].Cells[2]);
 				tab.Rows[1].Cells[1].Range.Text = "Бланк переключений";
 								
+					
 				
-				tab.Rows[3].Cells[1].Merge(tab.Rows[3].Cells[2]);
-				tab.Rows[3].Cells[1].Merge(tab.Rows[3].Cells[2]);
-				tab.Rows[3].Cells[1].Range.Text="Начало______час______мин\nКонец______час______мин";
-
-				tab.Rows[2].Cells[3].Range.Paragraphs.Add();
-				tab.Rows[2].Cells[3].Range.Paragraphs.First.Range.Select();
+				tab.Rows[2].Cells[4].Range.Paragraphs.Add();
+				tab.Rows[2].Cells[4].Range.Paragraphs.First.Range.Select();
 				app.Selection.Range.Fields.Add(app.Selection.Range, Text: "Date ");
-				tab.Rows[2].Cells[3].Range.ParagraphFormat.Alignment = WdParagraphAlignment.wdAlignParagraphCenter;
-				tab.Rows[2].Cells[3].Borders[WdBorderType.wdBorderBottom].LineStyle = WdLineStyle.wdLineStyleNone;
+				tab.Rows[2].Cells[4].Range.ParagraphFormat.Alignment = WdParagraphAlignment.wdAlignParagraphCenter;
 
-				tab.Rows[2].Cells[1].Range.Text = "№     ";
-				tab.Rows[2].Cells[1].Borders[WdBorderType.wdBorderBottom].LineStyle = WdLineStyle.wdLineStyleSingle;
-				tab.Rows[2].Cells[1].Range.ParagraphFormat.Alignment = WdParagraphAlignment.wdAlignParagraphLeft;
+				tab.Rows[2].Cells[1].Range.Text = "№";
+				tab.Rows[2].Cells[1].Range.ParagraphFormat.Alignment = WdParagraphAlignment.wdAlignParagraphRight;
+
+				tab.Rows[2].Cells[2].Range.Text = "______";
+				tab.Rows[2].Cells[2].Range.ParagraphFormat.Alignment = WdParagraphAlignment.wdAlignParagraphRight;				
 
 
-				tab.Rows[2].Cells[2].Range.Text = "/" + getNumber(fileName);
-				tab.Rows[2].Cells[2].Borders[WdBorderType.wdBorderBottom].LineStyle = WdLineStyle.wdLineStyleSingle;
-				tab.Rows[2].Cells[2].Range.ParagraphFormat.Alignment = WdParagraphAlignment.wdAlignParagraphLeft;
+				tab.Rows[2].Cells[3].Range.Text = "/" + getNumber(fileName);
+				tab.Rows[2].Cells[3].Range.ParagraphFormat.Alignment = WdParagraphAlignment.wdAlignParagraphLeft;
+				tab.Rows[2].Cells[3].Range.Font.Underline = WdUnderline.wdUnderlineSingle;
+				
+				tab.Rows[2].Cells[1].PreferredWidthType = WdPreferredWidthType.wdPreferredWidthAuto;
+				tab.Rows[2].Cells[2].PreferredWidthType = WdPreferredWidthType.wdPreferredWidthAuto;
+				tab.Rows[2].Cells[3].PreferredWidthType = WdPreferredWidthType.wdPreferredWidthAuto;
+				tab.Rows[2].Cells[4].PreferredWidthType = WdPreferredWidthType.wdPreferredWidthAuto;
 
-				tab.Rows[2].Cells[1].PreferredWidthType = WdPreferredWidthType.wdPreferredWidthPercent;
-				tab.Rows[2].Cells[2].PreferredWidthType = WdPreferredWidthType.wdPreferredWidthPercent;
-				tab.Rows[2].Cells[3].PreferredWidthType = WdPreferredWidthType.wdPreferredWidthPercent;
+				tab.Rows[3].Cells[1].Merge(tab.Rows[3].Cells[2]);
+				tab.Rows[3].Cells[2].Merge(tab.Rows[3].Cells[3]);
+				tab.Rows[3].Cells[1].Range.Text = "Начало";
+				tab.Rows[3].Cells[2].Range.Text = "____час____мин";
+				tab.Rows[3].Cells[1].Range.ParagraphFormat.Alignment = WdParagraphAlignment.wdAlignParagraphRight;
+				tab.Rows[3].Cells[2].Range.ParagraphFormat.Alignment = WdParagraphAlignment.wdAlignParagraphLeft;
 
-				tab.Rows[2].Cells[1].PreferredWidth = 20;
+				tab.Rows[4].Cells[1].Merge(tab.Rows[4].Cells[2]);
+				tab.Rows[4].Cells[2].Merge(tab.Rows[4].Cells[3]);
+				tab.Rows[4].Cells[1].Range.Text = "Конец";
+				tab.Rows[4].Cells[2].Range.Text = "____час____мин";
+				tab.Rows[4].Cells[1].Range.ParagraphFormat.Alignment = WdParagraphAlignment.wdAlignParagraphRight;
+				tab.Rows[4].Cells[2].Range.ParagraphFormat.Alignment = WdParagraphAlignment.wdAlignParagraphLeft;
+
+
+				/*tab.Rows[2].Cells[1].PreferredWidth = 20;
 				tab.Rows[2].Cells[2].PreferredWidth = 50;
-				tab.Rows[2].Cells[3].PreferredWidth = 30;
+				tab.Rows[2].Cells[3].PreferredWidth = 30;*/
 
 				first.Rows[1].Cells[2].Range.InsertAfter("Филиал ОАО \"РусГидро\"\n - \"Воткинская ГЭС\"");
 
@@ -293,7 +309,7 @@ namespace Office.Shared
 			try {
 				string[] fns=fileName.Split("\\".ToCharArray());
 				string fn=fns[fns.Length - 1];
-				char[] separ= { ' ', '-', };
+				char[] separ= { ' ', ' ', };
 				fns = fn.Split(separ);
 				fn = fns[0];
 				number = fns[0];
