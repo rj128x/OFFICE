@@ -40,12 +40,22 @@ namespace Office.Shared
 			return true;
 		}
 
-		protected void podpis(Document doc) {
+		protected void podpis(Document doc, int cnt) {
 			int count=doc.Paragraphs.Count;
 			int cntNotNull=0;
 
+			//doc.Select();
+			//doc.SelectAllEditableRanges();
+			doc.Paragraphs.Format.KeepTogether = 0;
+			doc.Paragraphs.Format.KeepWithNext = 0;
+
+			if (doc.Tables.Count > 2) {
+				doc.Tables[doc.Tables.Count - 1].Rows.Last.Range.ParagraphFormat.KeepWithNext = -1;
+				doc.Tables[doc.Tables.Count - 1].Rows.Last.Range.ParagraphFormat.KeepTogether = -1;
+			}
+
 			Paragraph last=doc.Paragraphs.Last;
-			while (cntNotNull < 10) {
+			while (cntNotNull <= cnt) {
 				if (last.Range.Text.Trim().Length > 3) {
 					//Logger.log(last.Range.Text);
 					cntNotNull++;
@@ -113,7 +123,7 @@ namespace Office.Shared
 
 				replaceSpaces(doc);
 				addFooter(fileName, doc,true);
-				podpis(doc);
+				podpis(doc,7);
 				Logger.log(fileName);
 				(doc as _Document).Close(SaveChanges: true);
 				return true;
@@ -146,10 +156,47 @@ namespace Office.Shared
 				first.Columns.Add();
 				first.AutoFormat(ApplyBorders: false, ApplyShading: false, ApplyFont: false, ApplyColor: false, ApplyHeadingRows: false,
 				ApplyLastRow: false, ApplyFirstColumn: false, AutoFit: false, ApplyLastColumn: false);
-				first.Rows[1].Cells[1].Range.Fields.Add(app.Selection.Range, Type: WdFieldType.wdFieldDate);
-				first.Rows[1].Cells[1].Range.InsertBefore("Бланк переключений №________");
-				first.Rows[1].Cells[1].Range.InsertAfter("\nНачало______час______мин\nКонец______час______мин");
+				
+				Table tab =first.Rows[1].Cells[1].Range.Tables.Add(first.Rows[1].Cells[1].Range, 1, 3);
+				tab.Rows.Add();
+				tab.Rows.Add();
+							
+				
+
+				tab.Rows[1].Cells[1].Merge(tab.Rows[1].Cells[2]);
+				tab.Rows[1].Cells[1].Merge(tab.Rows[1].Cells[2]);
+				tab.Rows[1].Cells[1].Range.Text = "Бланк переключений";
+								
+				
+				tab.Rows[3].Cells[1].Merge(tab.Rows[3].Cells[2]);
+				tab.Rows[3].Cells[1].Merge(tab.Rows[3].Cells[2]);
+				tab.Rows[3].Cells[1].Range.Text="Начало______час______мин\nКонец______час______мин";
+
+				tab.Rows[2].Cells[3].Range.Paragraphs.Add();
+				tab.Rows[2].Cells[3].Range.Paragraphs.First.Range.Select();
+				app.Selection.Range.Fields.Add(app.Selection.Range, Text: "Date ");
+				tab.Rows[2].Cells[3].Range.ParagraphFormat.Alignment = WdParagraphAlignment.wdAlignParagraphCenter;
+				tab.Rows[2].Cells[3].Borders[WdBorderType.wdBorderBottom].LineStyle = WdLineStyle.wdLineStyleNone;
+
+				tab.Rows[2].Cells[1].Range.Text = "№     ";
+				tab.Rows[2].Cells[1].Borders[WdBorderType.wdBorderBottom].LineStyle = WdLineStyle.wdLineStyleSingle;
+				tab.Rows[2].Cells[1].Range.ParagraphFormat.Alignment = WdParagraphAlignment.wdAlignParagraphLeft;
+
+
+				tab.Rows[2].Cells[2].Range.Text = "/" + getNumber(fileName);
+				tab.Rows[2].Cells[2].Borders[WdBorderType.wdBorderBottom].LineStyle = WdLineStyle.wdLineStyleSingle;
+				tab.Rows[2].Cells[2].Range.ParagraphFormat.Alignment = WdParagraphAlignment.wdAlignParagraphLeft;
+
+				tab.Rows[2].Cells[1].PreferredWidthType = WdPreferredWidthType.wdPreferredWidthPercent;
+				tab.Rows[2].Cells[2].PreferredWidthType = WdPreferredWidthType.wdPreferredWidthPercent;
+				tab.Rows[2].Cells[3].PreferredWidthType = WdPreferredWidthType.wdPreferredWidthPercent;
+
+				tab.Rows[2].Cells[1].PreferredWidth = 20;
+				tab.Rows[2].Cells[2].PreferredWidth = 50;
+				tab.Rows[2].Cells[3].PreferredWidth = 30;
+
 				first.Rows[1].Cells[2].Range.InsertAfter("Филиал ОАО \"РусГидро\"\n - \"Воткинская ГЭС\"");
+
 				first.AutoFitBehavior(WdAutoFitBehavior.wdAutoFitWindow);
 
 				Table last=doc.Range().Tables[doc.Range().Tables.Count];
@@ -195,7 +242,7 @@ namespace Office.Shared
 
 				replaceSpaces(doc);
 				addFooter(fileName, doc,false);
-				podpis(doc);
+				podpis(doc,10);
 				
 				Logger.log(fileName);
 				(doc as _Document).Close(SaveChanges: true);
@@ -234,6 +281,7 @@ namespace Office.Shared
 		protected void replaceSpaces(Document doc) {
 			int count=0;
 			doc.Range().Find.Execute(FindText: "^w", MatchCase: false, ReplaceWith: " ", Replace: WdReplace.wdReplaceAll) ;
+			doc.Range().Find.Execute(FindText: "^w^p", MatchCase: false, ReplaceWith: "^p", Replace: WdReplace.wdReplaceAll);
 			for (int i=0;i<20;i++){
 				doc.Range().Find.Execute(FindText: "^p^p", MatchCase: false, ReplaceWith: "^p", Replace: WdReplace.wdReplaceAll);
 			}
