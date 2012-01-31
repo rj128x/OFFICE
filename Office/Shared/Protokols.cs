@@ -22,7 +22,7 @@ namespace Office.Shared
 			Worksheet newWS=newWB.Worksheets.Add();
 
 
-			for (int rowIndex=1; rowIndex <= 41; rowIndex++) {
+			for (int rowIndex=2; rowIndex <= 42; rowIndex++) {
 				string surname=wsPeople.Cells[1][rowIndex].Value.ToString();
 				string firstName=wsPeople.Cells[2][rowIndex].Value.ToString();
 				string secName=wsPeople.Cells[3][rowIndex].Value.ToString();
