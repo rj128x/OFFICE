@@ -4,7 +4,7 @@ using System.IO;
 
 namespace Office.Shared
 {
-	public enum BlankOperation{replace,tip,current}
+	public enum BlankOperation { replace, tip, current }
 	class ProcessBlanks
 	{
 		protected FolderOperations folder=null;
@@ -20,7 +20,7 @@ namespace Office.Shared
 		protected string path;
 
 		protected Document doc;
-		public ProcessBlanks(string path,string pathPDF, string pathTip, string pathCurrent,bool createPDF, bool onlyFirstPage, bool createTip, bool createCurrent,bool Visible) {
+		public ProcessBlanks(string path, string pathPDF, string pathTip, string pathCurrent, bool createPDF, bool onlyFirstPage, bool createTip, bool createCurrent, bool Visible) {
 			this.createCurrent = createCurrent;
 			this.createPDF = createPDF;
 			this.createTip = createTip;
@@ -33,14 +33,14 @@ namespace Office.Shared
 			FolderOperations folder=new FolderOperations();
 			folder.processFile = Operation;
 
-			folder.calcFolder(path);			
+			folder.calcFolder(path);
 		}
 
 		protected bool Operation(string fileName) {
 			FileInfo fileInfo=new FileInfo(fileName);
 			Logger.log(fileName);
-			try{
-				if (createTip) {				
+			try {
+				if (createTip) {
 					string newFileName=fileName.Replace(path, pathTip);
 					string dir=fileInfo.Directory.FullName.Replace(path, pathTip);
 					Directory.CreateDirectory(dir);
@@ -54,7 +54,7 @@ namespace Office.Shared
 						File.Delete(newFileNamePDF);
 					}
 					Logger.log(newFileName);
-					
+
 					File.Copy(fileName, newFileName);
 					createTipBlank(newFileName, createPDF, newFileNamePDF);
 					return true;
@@ -71,24 +71,24 @@ namespace Office.Shared
 					createBlank(newFileName);
 					return true;
 				}
-			}catch (Exception e){
-				Logger.log("ERROR "+e.ToString());
+			} catch (Exception e) {
+				Logger.log("ERROR " + e.ToString());
 			}
 			return true;
 
 		}
 
-		protected bool replaceNSGES(string fileName) {			
+		protected bool replaceNSGES(string fileName) {
 			doc = app.Documents.Open(fileName, Visible: true, ReadOnly: false);
 
 			int count=0;
 			while (doc.Range().Find.Execute(FindText: "НС ГЭС", MatchCase: false, ReplaceWith: "НСС", Replace: WdReplace.wdReplaceOne)) {
 				count++;
 			}
-			Logger.log(fileName+"-"+count.ToString());
-			
-			(doc as _Document).Close(SaveChanges: true);			
-			
+			Logger.log(fileName + "-" + count.ToString());
+
+			(doc as _Document).Close(SaveChanges: true);
+
 			return true;
 		}
 
@@ -102,8 +102,10 @@ namespace Office.Shared
 			doc.Paragraphs.Format.KeepWithNext = 0;
 
 			if (doc.Tables.Count > 2) {
-				doc.Tables[doc.Tables.Count - 1].Rows.Last.Range.ParagraphFormat.KeepWithNext = -1;
-				doc.Tables[doc.Tables.Count - 1].Rows.Last.Range.ParagraphFormat.KeepTogether = -1;
+				try {
+					doc.Tables[doc.Tables.Count - 1].Rows.Last.Range.ParagraphFormat.KeepWithNext = -1;
+					doc.Tables[doc.Tables.Count - 1].Rows.Last.Range.ParagraphFormat.KeepTogether = -1;
+				}catch{}
 			}
 
 			Paragraph last=doc.Paragraphs.Last;
@@ -112,31 +114,32 @@ namespace Office.Shared
 					//Logger.log(last.Range.Text);
 					cntNotNull++;
 				}
-				last.Format.KeepWithNext = -1;
-				last.Format.KeepTogether = -1;
+				try {
+					last.Format.KeepWithNext = -1;
+					last.Format.KeepTogether = -1;
+				} catch { }
 				last = last.Previous();
 			}
-			
+
 		}
 
-		protected void saveAsPDF(Document wordDocument, string fileTo){
+		protected void saveAsPDF(Document wordDocument, string fileTo) {
 			string paramExportFilePath = fileTo;
 			WdExportFormat paramExportFormat = WdExportFormat.wdExportFormatPDF;
 			bool paramOpenAfterExport = false;
-			WdExportOptimizeFor paramExportOptimizeFor =
-				 WdExportOptimizeFor.wdExportOptimizeForPrint;
-			WdExportRange paramExportRange = onlyFirstPage? WdExportRange.wdExportFromTo:WdExportRange.wdExportAllDocument;
+			WdExportOptimizeFor paramExportOptimizeFor =	 WdExportOptimizeFor.wdExportOptimizeForPrint;
+			WdExportRange paramExportRange = onlyFirstPage ? WdExportRange.wdExportFromTo : WdExportRange.wdExportAllDocument;
 			int paramStartPage = 0;
 			int paramEndPage = 0;
 			if (onlyFirstPage) {
 				paramStartPage = 1;
 				paramEndPage = 1;
-			} 
+			}
 			WdExportItem paramExportItem = WdExportItem.wdExportDocumentContent;
 			bool paramIncludeDocProps = true;
 			bool paramKeepIRM = true;
 			WdExportCreateBookmarks paramCreateBookmarks = 
-				 WdExportCreateBookmarks.wdExportCreateWordBookmarks;
+				 WdExportCreateBookmarks.wdExportCreateNoBookmarks;
 			bool paramDocStructureTags = true;
 			bool paramBitmapMissingFonts = true;
 			bool paramUseISO19005_1 = false;
@@ -144,12 +147,12 @@ namespace Office.Shared
 
 			if (wordDocument != null)
 				wordDocument.ExportAsFixedFormat(paramExportFilePath,
-            paramExportFormat, paramOpenAfterExport, 
-            paramExportOptimizeFor, paramExportRange, paramStartPage,
-            paramEndPage, paramExportItem, paramIncludeDocProps, 
-            paramKeepIRM, paramCreateBookmarks, paramDocStructureTags, 
-            paramBitmapMissingFonts, paramUseISO19005_1,
-            ref paramMissing);
+				paramExportFormat, paramOpenAfterExport,
+				paramExportOptimizeFor, paramExportRange, paramStartPage,
+				paramEndPage, paramExportItem, paramIncludeDocProps,
+				paramKeepIRM, paramCreateBookmarks, paramDocStructureTags,
+				paramBitmapMissingFonts, paramUseISO19005_1,
+				ref paramMissing);
 		}
 
 		protected bool createTipBlank(string fileName, bool pdf, string pdfName) {
@@ -164,7 +167,7 @@ namespace Office.Shared
 				doc.PageSetup.RightMargin = 30;
 				doc.PageSetup.FooterDistance = 30;
 				doc.PageSetup.HeaderDistance = 0;
-				
+
 				int x=doc.Range().Tables.Count;
 
 				Table first=doc.Range().Tables[1];
@@ -174,11 +177,11 @@ namespace Office.Shared
 				first.AutoFormat(ApplyBorders: false, ApplyShading: false, ApplyFont: false, ApplyColor: false, ApplyHeadingRows: false,
 				ApplyLastRow: false, ApplyFirstColumn: false, AutoFit: true, ApplyLastColumn: false);
 
-				
-				first.Rows[1].Cells[1].Range.Text="Типовой бланк переключений\n №" + getNumber(fileName);
+
+				first.Rows[1].Cells[1].Range.Text = "Типовой бланк переключений\n №" + getNumber(fileName);
 				first.Rows[1].Cells[2].Range.Text = "Утверждаю\nИ.о. главного инженера филиала\nОАО \"РусГидро\" - \"Воткинская ГЭС\"\n__________________В.Г.Алексеев\n\"____\"_____________2012г.";
 				first.AutoFitBehavior(WdAutoFitBehavior.wdAutoFitWindow);
-			
+
 
 				Table last=doc.Range().Tables[doc.Range().Tables.Count];
 				resetTable(last);
@@ -207,8 +210,8 @@ namespace Office.Shared
 				//replaceSpaces(last);
 
 				replaceSpaces(doc);
-				addFooter(fileName, doc,true);
-				podpis(doc,7);
+				addFooter(fileName, doc, true);
+				podpis(doc, 7);
 
 				if (pdf) {
 					saveAsPDF(doc, pdfName);
@@ -246,20 +249,20 @@ namespace Office.Shared
 				first.AutoFormat(ApplyBorders: false, ApplyShading: false, ApplyFont: false, ApplyColor: false, ApplyHeadingRows: false,
 				ApplyLastRow: false, ApplyFirstColumn: false, AutoFit: false, ApplyLastColumn: false);
 				first.Rows[1].Cells[1].Range.ParagraphFormat.Alignment = WdParagraphAlignment.wdAlignParagraphCenter;
-				
+
 				Table tab =first.Rows[1].Cells[1].Range.Tables.Add(first.Rows[1].Cells[1].Range, 1, 4);
 				tab.Rows.Add();
 				tab.Rows.Add();
 				tab.Rows.Add();
-				
+
 
 				tab.Rows[1].Cells[1].Merge(tab.Rows[1].Cells[2]);
 				tab.Rows[1].Cells[1].Merge(tab.Rows[1].Cells[2]);
 				tab.Rows[1].Cells[1].Merge(tab.Rows[1].Cells[2]);
 				tab.Rows[1].Cells[1].Range.Text = "Бланк переключений";
-								
-					
-				
+
+
+
 				tab.Rows[2].Cells[4].Range.Paragraphs.Add();
 				tab.Rows[2].Cells[4].Range.Paragraphs.First.Range.Select();
 				app.Selection.Range.Fields.Add(app.Selection.Range, Text: "Date ");
@@ -271,13 +274,13 @@ namespace Office.Shared
 				tab.Rows[2].Cells[2].Range.Text = "______";
 				tab.Rows[2].Cells[2].Range.ParagraphFormat.Alignment = WdParagraphAlignment.wdAlignParagraphRight;
 				tab.Rows[2].Cells[2].Range.Font.Color = WdColor.wdColorWhite;
-		
+
 
 				tab.Rows[2].Cells[3].Range.Text = "/" + getNumber(fileName);
 				tab.Rows[2].Cells[3].Range.ParagraphFormat.Alignment = WdParagraphAlignment.wdAlignParagraphLeft;
 
 				tab.Rows[2].Borders[WdBorderType.wdBorderBottom].LineStyle = WdLineStyle.wdLineStyleSingle;
-				
+
 				tab.Rows[2].Cells[1].PreferredWidthType = WdPreferredWidthType.wdPreferredWidthAuto;
 				tab.Rows[2].Cells[2].PreferredWidthType = WdPreferredWidthType.wdPreferredWidthAuto;
 				tab.Rows[2].Cells[3].PreferredWidthType = WdPreferredWidthType.wdPreferredWidthAuto;
@@ -325,7 +328,7 @@ namespace Office.Shared
 				last.Rows[3].Cells[2].Range.Text = "_________/_____________________/";
 				last.Rows[4].Cells[1].Range.Text = "Лицо контролируюшее (НС):";
 				last.Rows[4].Cells[2].Range.Text = "_________/_____________________/";
-				
+
 
 				last.Rows[2].Cells[1].Range.ParagraphFormat.Alignment = WdParagraphAlignment.wdAlignParagraphRight;
 				last.Rows[3].Cells[1].Range.ParagraphFormat.Alignment = WdParagraphAlignment.wdAlignParagraphRight;
@@ -340,16 +343,16 @@ namespace Office.Shared
 				ApplyLastRow: false, ApplyFirstColumn: false, AutoFit: true, ApplyLastColumn: false);
 				last.Rows.First.Cells.Merge();
 				last.AutoFitBehavior(WdAutoFitBehavior.wdAutoFitWindow);
-				
+
 
 				//replaceSpaces(first);
 				//replaceSpaces(last);
 
 
 				replaceSpaces(doc);
-				addFooter(fileName, doc,false);
-				podpis(doc,10);
-				
+				addFooter(fileName, doc, false);
+				podpis(doc, 10);
+
 				Logger.log(fileName);
 				(doc as _Document).Close(SaveChanges: true);
 				return true;
@@ -367,28 +370,28 @@ namespace Office.Shared
 				table.Rows.First.Delete();
 			while (table.Columns.Count != 1)
 				table.Columns.First.Delete();
-			table.Rows[1].Cells[1].Range.Text = "";			
-			table.Range.ParagraphFormat.Reset();			
+			table.Rows[1].Cells[1].Range.Text = "";
+			table.Range.ParagraphFormat.Reset();
 			table.Range.Font.Reset();
 			table.Range.Font.Name = "Times New Roman";
 			table.Borders.InsideLineStyle = WdLineStyle.wdLineStyleNone;
 			table.Borders.OutsideLineStyle = WdLineStyle.wdLineStyleNone;
 
-			table.Range.ParagraphFormat.Alignment = WdParagraphAlignment.wdAlignParagraphCenter;	
+			table.Range.ParagraphFormat.Alignment = WdParagraphAlignment.wdAlignParagraphCenter;
 		}
 
 		protected void replaceSpaces(Table table) {
 			table.Select();
 			app.Selection.Find.Execute(FindText: " ", MatchCase: false, ReplaceWith: "^s", Replace: WdReplace.wdReplaceAll);
-			
+
 		}
 
 
 		protected void replaceSpaces(Document doc) {
 			int count=0;
-			doc.Range().Find.Execute(FindText: "^w", MatchCase: false, ReplaceWith: " ", Replace: WdReplace.wdReplaceAll) ;
+			doc.Range().Find.Execute(FindText: "^w", MatchCase: false, ReplaceWith: " ", Replace: WdReplace.wdReplaceAll);
 			doc.Range().Find.Execute(FindText: "^w^p", MatchCase: false, ReplaceWith: "^p", Replace: WdReplace.wdReplaceAll);
-			for (int i=0;i<20;i++){
+			for (int i=0; i < 20; i++) {
 				doc.Range().Find.Execute(FindText: "^p^p", MatchCase: false, ReplaceWith: "^p", Replace: WdReplace.wdReplaceAll);
 			}
 		}
@@ -410,7 +413,7 @@ namespace Office.Shared
 
 
 
-		protected void addFooter(string fileName,Document doc, bool addTip) {
+		protected void addFooter(string fileName, Document doc, bool addTip) {
 			string number=getNumber(fileName);
 
 
@@ -418,7 +421,7 @@ namespace Office.Shared
 			range1.Text = "";
 			range1.Select();
 			range1.Delete();
-			
+
 			Range range=doc.Sections.First.Footers[WdHeaderFooterIndex.wdHeaderFooterPrimary].Range;
 			range.Text = "";
 			range.Font.Size = 12;
@@ -427,10 +430,10 @@ namespace Office.Shared
 
 			range.Fields.Add(app.Selection.Range, Type: WdFieldType.wdFieldPage);
 
-				if (number.Length > 0) {
-					range.InsertBefore(number.ToString() + "     -");
-					range.InsertAfter("-");
-				}
+			if (number.Length > 0) {
+				range.InsertBefore(number.ToString() + "     -");
+				range.InsertAfter("-");
+			}
 			range.ParagraphFormat.Alignment = WdParagraphAlignment.wdAlignParagraphRight;
 		}
 	}
