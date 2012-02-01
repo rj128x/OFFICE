@@ -1,5 +1,6 @@
 ﻿using System;
 using Microsoft.Office.Interop.Word;
+using System.IO;
 
 namespace Office.Shared
 {
@@ -8,22 +9,73 @@ namespace Office.Shared
 	{
 		protected FolderOperations folder=null;
 		protected Application app=new Application();
+
+		protected bool createPDF;
+		protected bool createTip;
+		protected bool createCurrent;
+		protected bool onlyFirstPage;
+		protected string pathTip;
+		protected string pathPDF;
+		protected string pathCurrent;
+		protected string path;
+
 		protected Document doc;
-		public ProcessBlanks(string path, BlankOperation oper,bool Visible) {
+		public ProcessBlanks(string path,string pathPDF, string pathTip, string pathCurrent,bool createPDF, bool onlyFirstPage, bool createTip, bool createCurrent,bool Visible) {
+			this.createCurrent = createCurrent;
+			this.createPDF = createPDF;
+			this.createTip = createTip;
+			this.onlyFirstPage = onlyFirstPage;
+			this.path = path;
+			this.pathCurrent = pathCurrent;
+			this.pathPDF = pathPDF;
+			this.pathTip = pathTip;
 			app.Visible = Visible;
 			FolderOperations folder=new FolderOperations();
-			switch (oper) {
-				case BlankOperation.replace:
-					folder.processFile = replaceNSGES;
-					break;
-				case BlankOperation.current:
-					folder.processFile = createBlank;
-					break;
-				case BlankOperation.tip:
-					folder.processFile = createTipBlank;
-					break;
-			}
+			folder.processFile = Operation;
+
 			folder.calcFolder(path);			
+		}
+
+		protected bool Operation(string fileName) {
+			FileInfo fileInfo=new FileInfo(fileName);
+			Logger.log(fileName);
+			try{
+				if (createTip) {				
+					string newFileName=fileName.Replace(path, pathTip);
+					string dir=fileInfo.Directory.FullName.Replace(path, pathTip);
+					Directory.CreateDirectory(dir);
+					string newFileNamePDF=fileName.Replace(path, pathPDF).Replace(".docx", ".pdf").Replace(".doc", ".pdf");
+					dir = fileInfo.Directory.FullName.Replace(path, pathPDF);
+					Directory.CreateDirectory(dir);
+					if (File.Exists(newFileName)) {
+						File.Delete(newFileName);
+					}
+					if (File.Exists(newFileNamePDF)) {
+						File.Delete(newFileNamePDF);
+					}
+					Logger.log(newFileName);
+					
+					File.Copy(fileName, newFileName);
+					createTipBlank(newFileName, createPDF, newFileNamePDF);
+					return true;
+				}
+				if (createCurrent) {
+					string newFileName=fileName.Replace(path, pathCurrent);
+					string dir=fileInfo.Directory.FullName.Replace(path, pathTip);
+					Directory.CreateDirectory(dir);
+					if (File.Exists(newFileName)) {
+						File.Delete(newFileName);
+					}
+					Logger.log(newFileName);
+					File.Copy(fileName, newFileName);
+					createBlank(newFileName);
+					return true;
+				}
+			}catch (Exception e){
+				Logger.log("ERROR "+e.ToString());
+			}
+			return true;
+
 		}
 
 		protected bool replaceNSGES(string fileName) {			
@@ -67,7 +119,40 @@ namespace Office.Shared
 			
 		}
 
-		protected bool createTipBlank(string fileName) {
+		protected void saveAsPDF(Document wordDocument, string fileTo){
+			string paramExportFilePath = fileTo;
+			WdExportFormat paramExportFormat = WdExportFormat.wdExportFormatPDF;
+			bool paramOpenAfterExport = false;
+			WdExportOptimizeFor paramExportOptimizeFor =
+				 WdExportOptimizeFor.wdExportOptimizeForPrint;
+			WdExportRange paramExportRange = onlyFirstPage? WdExportRange.wdExportFromTo:WdExportRange.wdExportAllDocument;
+			int paramStartPage = 0;
+			int paramEndPage = 0;
+			if (onlyFirstPage) {
+				paramStartPage = 1;
+				paramEndPage = 1;
+			} 
+			WdExportItem paramExportItem = WdExportItem.wdExportDocumentContent;
+			bool paramIncludeDocProps = true;
+			bool paramKeepIRM = true;
+			WdExportCreateBookmarks paramCreateBookmarks = 
+				 WdExportCreateBookmarks.wdExportCreateWordBookmarks;
+			bool paramDocStructureTags = true;
+			bool paramBitmapMissingFonts = true;
+			bool paramUseISO19005_1 = false;
+			object paramMissing = Type.Missing;
+
+			if (wordDocument != null)
+				wordDocument.ExportAsFixedFormat(paramExportFilePath,
+            paramExportFormat, paramOpenAfterExport, 
+            paramExportOptimizeFor, paramExportRange, paramStartPage,
+            paramEndPage, paramExportItem, paramIncludeDocProps, 
+            paramKeepIRM, paramCreateBookmarks, paramDocStructureTags, 
+            paramBitmapMissingFonts, paramUseISO19005_1,
+            ref paramMissing);
+		}
+
+		protected bool createTipBlank(string fileName, bool pdf, string pdfName) {
 			doc = null;
 			try {
 				doc = app.Documents.Open(fileName, Visible: true, ReadOnly: false);
@@ -91,7 +176,7 @@ namespace Office.Shared
 
 				
 				first.Rows[1].Cells[1].Range.Text="Типовой бланк переключений\n №" + getNumber(fileName);
-				first.Rows[1].Cells[2].Range.Text = "Утверждаю\nГлавный инженер филиала\nОАО \"РусГидро\" - \"Воткинская ГЭС\"\n__________________А.П.Деев\n\"____\"_____________2012г.";
+				first.Rows[1].Cells[2].Range.Text = "Утверждаю\nИ.о. главного инженера филиала\nОАО \"РусГидро\" - \"Воткинская ГЭС\"\n__________________В.Г.Алексеев\n\"____\"_____________2012г.";
 				first.AutoFitBehavior(WdAutoFitBehavior.wdAutoFitWindow);
 			
 
@@ -124,6 +209,10 @@ namespace Office.Shared
 				replaceSpaces(doc);
 				addFooter(fileName, doc,true);
 				podpis(doc,7);
+
+				if (pdf) {
+					saveAsPDF(doc, pdfName);
+				}
 				Logger.log(fileName);
 				(doc as _Document).Close(SaveChanges: true);
 				return true;

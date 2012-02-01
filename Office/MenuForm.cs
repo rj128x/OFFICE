@@ -5,16 +5,17 @@ namespace Office
 {
 	public partial class MenuForm : Form
 	{
-		protected BlanksForm blanksForm;
+		protected PDFForm blanksForm;
 		protected ListsZnakForm listsZnakForm;
         protected ProtokolForm ocencaForm;
+		  protected PDFForm pdfForm;
 		public MenuForm() {
 			InitializeComponent();
 		}
 
 		private void btnBlanks_Click(object sender, EventArgs e) {
 			if (blanksForm == null) {
-				blanksForm = new BlanksForm();
+				blanksForm = new PDFForm();
 			}
 			blanksForm.ShowDialog();
 		}
@@ -35,5 +36,12 @@ namespace Office
             }
             ocencaForm.ShowDialog();
         }
+
+		  private void button1_Click(object sender, EventArgs e) {
+			  if (pdfForm == null) {
+				  pdfForm = new PDFForm();
+			  }
+			  pdfForm.ShowDialog();
+		  }
 	}
 }

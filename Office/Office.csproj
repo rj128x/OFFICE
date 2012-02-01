@@ -57,6 +57,12 @@
     <Compile Include="BlanksForm.Designer.cs">
       <DependentUpon>BlanksForm.cs</DependentUpon>
     </Compile>
+    <Compile Include="CreatePDFForm.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="CreatePDFForm.Designer.cs">
+      <DependentUpon>CreatePDFForm.cs</DependentUpon>
+    </Compile>
     <Compile Include="ListsZnakForm.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -84,8 +90,12 @@
       <DependentUpon>ProtokolForm.cs</DependentUpon>
     </Compile>
     <Compile Include="Shared\ProtokolsOcher.cs" />
+    <Compile Include="Shared\ProcessPDF.cs" />
     <EmbeddedResource Include="BlanksForm.resx">
       <DependentUpon>BlanksForm.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="CreatePDFForm.resx">
+      <DependentUpon>CreatePDFForm.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="ListsZnakForm.resx">
       <DependentUpon>ListsZnakForm.cs</DependentUpon>
