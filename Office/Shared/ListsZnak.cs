@@ -1,5 +1,6 @@
 ﻿using System;
 using Microsoft.Office.Interop.Excel;
+using System.Collections.Generic;
 
 namespace Office.Shared
 {
@@ -42,8 +43,11 @@ namespace Office.Shared
 					bool mg=isNeed(wsInstr, rowIndex, 11);
 					bool dgshu=isNeed(wsInstr, rowIndex, 12);
 					bool inj=isNeed(wsInstr, rowIndex, 13);
-					bool other=isNeed(wsInstr, rowIndex, 14);
-					bool create=nss || dem || mg || dgshu || inj || other;
+					bool rukGr=isNeed(wsInstr, rowIndex, 14);
+					bool gidr=isNeed(wsInstr, rowIndex, 15);
+					bool injRas=isNeed(wsInstr, rowIndex, 16);
+					bool teh=isNeed(wsInstr, rowIndex, 17);
+					bool create=nss || dem || mg || dgshu || inj || rukGr || gidr || injRas || teh;
 					if (create) {
 						string name=wsInstr.Cells[3][rowIndex].Value.ToString();
 						Logger.log(name);
@@ -52,31 +56,39 @@ namespace Office.Shared
 						Worksheet ws=newWB.Worksheets["Лист ознакомления"];
 						ws.Name = String.Format("{0}-{1}", folder, instr);
 						ws.Cells[1][2].Value = name;
+
+						Dictionary<string,string> data=getData(ws);
 						if (!nss) {
-							removeDoljn(ws, "Нач. ОС");
-							removeDoljn(ws, "Зам.нач.ОС");
-							removeDoljn(ws, "НСС");
-							removeDoljn(ws, "НС");
-							removeDoljn(ws, "Рук. гр. режимов");
+							removeDoljn(data, "Нач. ОС");
+							removeDoljn(data, "Зам.нач.ОС");
+							removeDoljn(data, "НСС");
+							removeDoljn(data, "НС");							
 						}
 						if (!dem) {
-							removeDoljn(ws, "ДЭМ");
+							removeDoljn(data, "ДЭМ");
 						}
 						if (!dgshu) {
-							removeDoljn(ws, "ДГЩУ");
+							removeDoljn(data, "ДГЩУ");
 						}
 						if (!mg) {
-							removeDoljn(ws, "МГ");
+							removeDoljn(data, "МГ");
 						}
 						if (!inj) {
-							removeDoljn(ws, "инженер");
+							removeDoljn(data, "инженер");
 						}
-						if (!other) {
-							removeDoljn(ws, "техник");
-							removeDoljn(ws, "инженер по рынку");
-							removeDoljn(ws, "инженер-гидролог");
+						if (!rukGr) {
+							removeDoljn(data, "Рук. гр. режимов");
 						}
-						refreshList(ws);
+						if (!injRas) {
+							removeDoljn(data, "инженер по расчетам");
+						}
+						if (!gidr) {
+							removeDoljn(data, "инженер-гидролог");
+						}
+						if (!teh) {
+							removeDoljn(data, "техник");
+						}
+						refreshList(ws,data);
 					}
 				}
 				System.Windows.Forms.Application.DoEvents();
@@ -89,35 +101,48 @@ namespace Office.Shared
 			return val == null ? false : val.ToString().ToUpper().Equals("V");
 		}
 
-		protected void removeDoljn(Worksheet sheet, string doljn) {
-			for (int rowIndex=5; rowIndex <= 49; rowIndex++) {
+		Dictionary<string, string> getData(Worksheet sheet) {
+			Dictionary<string,string> data=new Dictionary<string, string>();
+			for (int rowIndex=5; rowIndex <= oznakomLastString; rowIndex++) {
 				object val=sheet.Cells[2][rowIndex].Value;
 				string strVal=val == null ? "" : val.ToString();
-				if (strVal.ToLower().Trim().Equals(doljn.ToLower())) {
-					sheet.Cells[2][rowIndex].Value = "";
-					sheet.Cells[3][rowIndex].Value = "";
+
+				object key=sheet.Cells[3][rowIndex].Value;
+				string strKey=key == null ? "" : key.ToString();
+
+				if (!String.IsNullOrEmpty(strKey)) {
+					data.Add(strKey, strVal);
 				}
+
+				sheet.Cells[2][rowIndex].Value = "";
+				sheet.Cells[3][rowIndex].Value = "";
+			}
+			return data;
+		}
+
+		protected void removeDoljn(Dictionary<string, string> data, string doljn) {
+			List<string> forRemove=new List<string>();
+			foreach (KeyValuePair<string,string> de in data) {
+				if (de.Value.ToLower().Trim().Equals(doljn.ToLower())) {
+					forRemove.Add(de.Key);
+				}
+
+			}
+
+			foreach (string key in forRemove) {
+				data.Remove(key);
 			}
 
 		}
 
-		protected void refreshList(Worksheet sheet) {
-			for (int rowIndex=5; rowIndex <= oznakomLastString; rowIndex++) {
-				object val=sheet.Cells[2][rowIndex].Value;
-				string strVal=val == null ? "" : val.ToString();
-				if (strVal.Length == 0) {
-					for (int ri=rowIndex + 1; ri <= oznakomLastString; ri++) {
-						object nextVal=sheet.Cells[2][ri].Value;
-						string strNextVal=nextVal == null ? "" : nextVal.ToString();
-						if (strNextVal.Length > 0) {
-							sheet.Range[sheet.Cells[2][ri], sheet.Cells[3][oznakomLastString]].Cut(sheet.Cells[2][rowIndex]);
-							rowIndex = ri;
-							break;
-						}
-					}
-
-				}
+		protected void refreshList(Worksheet sheet, Dictionary<string,string> data) {
+			int row=5;
+			foreach (KeyValuePair<string,string> de in data) {
+				sheet.Cells[3][row].Value = de.Key;
+				sheet.Cells[2][row].Value = de.Value;
+				row++;
 			}
+
 			sheet.Range[sheet.Cells[2][5], sheet.Cells[3][oznakomLastString]].Borders.LineStyle = XlLineStyle.xlContinuous;
 
 		}
