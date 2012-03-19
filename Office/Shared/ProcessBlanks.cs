@@ -179,7 +179,7 @@ namespace Office.Shared
 
 
 				first.Rows[1].Cells[1].Range.Text = "Типовой бланк переключений\n №" + getNumber(fileName);
-				first.Rows[1].Cells[2].Range.Text = "Утверждаю\nИ.о. главного инженера филиала\nОАО \"РусГидро\" - \"Воткинская ГЭС\"\n__________________В.Г.Алексеев\n\"____\"_____________2012г.";
+				first.Rows[1].Cells[2].Range.Text = "Утверждаю\nГлавный инженер филиала\nОАО \"РусГидро\" - \"Воткинская ГЭС\"\n__________________В.Г.Алексеев\n\"____\"_____________2012г.";
 				first.AutoFitBehavior(WdAutoFitBehavior.wdAutoFitWindow);
 
 
