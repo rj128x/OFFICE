@@ -179,7 +179,7 @@ namespace Office.Shared
 
 
 				first.Rows[1].Cells[1].Range.Text = "Типовой бланк переключений\n №" + getNumber(fileName);
-				first.Rows[1].Cells[2].Range.Text = "Утверждаю\nГлавный инженер филиала\nОАО \"РусГидро\" - \"Воткинская ГЭС\"\n__________________В.Г.Алексеев\n\"____\"_____________2012г.";
+				first.Rows[1].Cells[2].Range.Text = "Утверждаю\nГлавный инженер филиала\nОАО \"РусГидро\" - \"Воткинская ГЭС\"\n__________________Э.М. Скрипка\n\"____\"_____________2012г.";
 				first.AutoFitBehavior(WdAutoFitBehavior.wdAutoFitWindow);
 
 
@@ -198,7 +198,7 @@ namespace Office.Shared
 				last.Rows[1].Cells[3].Range.Text = "Кочеев Н.Н.";
 				last.Rows[2].Cells[1].Range.Text = "Начальник ОС";
 				last.Rows[2].Cells[2].Range.Text = "_____________________";
-				last.Rows[2].Cells[3].Range.Text = "Цирлин С.Л.";
+				last.Rows[2].Cells[3].Range.Text = "Иванов А.В.";
 
 				last.Rows[1].Cells[1].Range.ParagraphFormat.Alignment = WdParagraphAlignment.wdAlignParagraphRight;
 				last.Rows[1].Cells[3].Range.ParagraphFormat.Alignment = WdParagraphAlignment.wdAlignParagraphLeft;
