@@ -390,7 +390,22 @@ namespace Office.Shared
 		protected void replaceSpaces(Document doc) {
 			int count=0;
 			doc.Range().Find.Execute(FindText: "^w", MatchCase: false, ReplaceWith: " ", Replace: WdReplace.wdReplaceAll);
+			doc.Range().Find.Execute(FindText: "^w.", MatchCase: false, ReplaceWith: ".", Replace: WdReplace.wdReplaceAll);
 			doc.Range().Find.Execute(FindText: "^w^p", MatchCase: false, ReplaceWith: "^p", Replace: WdReplace.wdReplaceAll);
+			doc.Range().Find.Execute(FindText: " -", MatchCase: false, ReplaceWith: "-", Replace: WdReplace.wdReplaceAll);
+			doc.Range().Find.Execute(FindText: "- ", MatchCase: false, ReplaceWith: "-", Replace: WdReplace.wdReplaceAll);
+			doc.Range().Find.Execute(FindText: "-110 кВ", MatchCase: false, ReplaceWith: " 110", Replace: WdReplace.wdReplaceAll);
+			doc.Range().Find.Execute(FindText: "-220 кВ", MatchCase: false, ReplaceWith: " 220", Replace: WdReplace.wdReplaceAll);
+			doc.Range().Find.Execute(FindText: "-500 кВ", MatchCase: false, ReplaceWith: " 500", Replace: WdReplace.wdReplaceAll);
+			doc.Range().Find.Execute(FindText: "-110", MatchCase: false, ReplaceWith: " 110", Replace: WdReplace.wdReplaceAll);
+			doc.Range().Find.Execute(FindText: "-220", MatchCase: false, ReplaceWith: " 220", Replace: WdReplace.wdReplaceAll);
+			doc.Range().Find.Execute(FindText: "-500", MatchCase: false, ReplaceWith: " 500", Replace: WdReplace.wdReplaceAll);
+			doc.Range().Find.Execute(FindText: "Иж-", MatchCase: false, ReplaceWith: "Ижевск ", Replace: WdReplace.wdReplaceAll);
+			doc.Range().Find.Execute(FindText: "Ижевск-", MatchCase: false, ReplaceWith: "Ижевск ", Replace: WdReplace.wdReplaceAll);
+			doc.Range().Find.Execute(FindText: "Водозабор-", MatchCase: false, ReplaceWith: "Водозабор ", Replace: WdReplace.wdReplaceAll);
+			doc.Range().Find.Execute(FindText: "Каучук-", MatchCase: false, ReplaceWith: "Каучук ", Replace: WdReplace.wdReplaceAll);
+			doc.Range().Find.Execute(FindText: "КШТ-", MatchCase: false, ReplaceWith: "КШТ ", Replace: WdReplace.wdReplaceAll);
+
 			for (int i=0; i < 20; i++) {
 				doc.Range().Find.Execute(FindText: "^p^p", MatchCase: false, ReplaceWith: "^p", Replace: WdReplace.wdReplaceAll);
 			}
