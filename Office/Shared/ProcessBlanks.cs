@@ -178,8 +178,7 @@ namespace Office.Shared
 				first.AutoFormat(ApplyBorders: false, ApplyShading: false, ApplyFont: false, ApplyColor: false, ApplyHeadingRows: false,
 				ApplyLastRow: false, ApplyFirstColumn: false, AutoFit: true, ApplyLastColumn: false);
 
-
-				first.Rows[1].Cells[1].Range.Text = "Типовой бланк переключений\n №" + getNumber(fileName);
+				first.Rows[1].Cells[1].Range.Text = "Типовой бланк переключений \n№" + getNumber(fileName);
 				first.Rows[1].Cells[2].Range.Text = "Утверждаю\nГлавный инженер филиала\nОАО \"РусГидро\" - \"Воткинская ГЭС\"\n__________________Э.М. Скрипка\n\"____\"_____________2012г.";
 				first.AutoFitBehavior(WdAutoFitBehavior.wdAutoFitWindow);
 
@@ -400,6 +399,7 @@ namespace Office.Shared
 			doc.Range().Find.Execute(FindText: "^w", MatchCase: false, ReplaceWith: " ", Replace: WdReplace.wdReplaceAll);
 			doc.Range().Find.Execute(FindText: "^w.", MatchCase: false, ReplaceWith: ".", Replace: WdReplace.wdReplaceAll);
 			doc.Range().Find.Execute(FindText: "^w^p", MatchCase: false, ReplaceWith: "^p", Replace: WdReplace.wdReplaceAll);
+			doc.Range().Find.Execute(FindText: "^p^w", MatchCase: false, ReplaceWith: "^p", Replace: WdReplace.wdReplaceAll);
 			doc.Range().Find.Execute(FindText: "–", MatchCase: false, ReplaceWith: "-", Replace: WdReplace.wdReplaceAll);
 			doc.Range().Find.Execute(FindText: " -", MatchCase: false, ReplaceWith: "-", Replace: WdReplace.wdReplaceAll);
 			doc.Range().Find.Execute(FindText: "- ", MatchCase: false, ReplaceWith: "-", Replace: WdReplace.wdReplaceAll);
@@ -452,7 +452,11 @@ namespace Office.Shared
 		}
 
 		protected string getObjectName(string findStr, string text) {
-			text = text.Remove(0, text.IndexOf(findStr) + findStr.Length);
+			int index=text.IndexOf(findStr);
+			if (index > 10)
+				return "";
+			text = text.Remove(0,  index + findStr.Length);
+			
 			if (text.IndexOf("автомат") >= 0)
 				return "";
 			if (text.IndexOf("рубильник") >= 0)
@@ -473,8 +477,8 @@ namespace Office.Shared
 			List<String> resOff=new List<string>();			
 			foreach (Paragraph p in doc.Range().Paragraphs) {
 				string text=p.Range.Text;
-				foreach (string onStr in onStrs) {
-					if (text.IndexOf(onStr) >= 0) {
+				foreach (string onStr in onStrs) {					
+					if (text.IndexOf(onStr) >= 0) {						
 						string obj=getObjectName(onStr, text);
 						if (obj.Length > 0) {
 							if (!resOff.Contains(obj) && !resOn.Contains(obj))
@@ -495,7 +499,7 @@ namespace Office.Shared
 			}
 			string res="";
 			if (resOn.Count > 0 && resOff.Count > 0) {
-				res= "Включены: " + String.Join(", ", resOn.ToArray()) + "\nОтключены: " + String.Join(", ", resOff.ToArray()) + "\n";
+				res= "Включены: " + String.Join("; ", resOn.ToArray()) + "\nОтключены: " + String.Join("; ", resOff.ToArray()) + "\n";
 			}
 			return res;
 		}
@@ -507,14 +511,13 @@ namespace Office.Shared
 				foreach (Paragraph p in doc.Range().Paragraphs) {
 					string text=p.Range.Text;
 					if (text.IndexOf("Исходная схема станции") == 0) {
-						p.Range.Select();
-						app.Selection.TypeParagraph();
-						app.Selection.Font.Bold = 0;
-						app.Selection.Font.Underline = 0;
-						app.Selection.Font.Italic = 1;
-						app.Selection.ParagraphFormat.Alignment = WdParagraphAlignment.wdAlignParagraphJustify;
-						app.Selection.Font.Size = 12;
-						app.Selection.TypeText(schema);
+						Paragraph newP= doc.Paragraphs.Add(p.Next().Range);
+						newP.Range.Font.Bold = 0;
+						newP.Range.Font.Underline = 0;
+						newP.Range.Font.Italic = 1;
+						newP.Range.ParagraphFormat.Alignment = WdParagraphAlignment.wdAlignParagraphJustify;
+						newP.Range.Font.Size = 12;
+						newP.Range.Text = schema;
 						break;
 					}
 				}

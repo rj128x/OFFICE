@@ -8,7 +8,7 @@ namespace Office
 		protected PDFForm blanksForm;
 		protected ListsZnakForm listsZnakForm;
         protected ProtokolForm ocencaForm;
-		  protected PDFForm pdfForm;
+		  protected CreatePDFForm pdfForm;
 		public MenuForm() {
 			InitializeComponent();
 		}
@@ -39,7 +39,7 @@ namespace Office
 
 		  private void button1_Click(object sender, EventArgs e) {
 			  if (pdfForm == null) {
-				  pdfForm = new PDFForm();
+				  pdfForm = new CreatePDFForm();
 			  }
 			  pdfForm.ShowDialog();
 		  }
