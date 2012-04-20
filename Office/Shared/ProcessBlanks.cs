@@ -1,6 +1,7 @@
 ﻿using System;
 using Microsoft.Office.Interop.Word;
 using System.IO;
+using System.Collections.Generic;
 
 namespace Office.Shared
 {
@@ -210,6 +211,7 @@ namespace Office.Shared
 				//replaceSpaces(last);
 
 				replaceSpaces(doc);
+				makeSchema(doc);
 				addFooter(fileName, doc, true);
 				podpis(doc, 7);
 
@@ -386,28 +388,136 @@ namespace Office.Shared
 
 		}
 
+		protected void replaceVVL(string line, string u){
+			doc.Range().Find.Execute(FindText: " В "+line, MatchCase: false, ReplaceWith: " В ВЛ "+u+" "+line+" ", Replace: WdReplace.wdReplaceAll);
+			doc.Range().Find.Execute(FindText: " В "+u+" " + line, MatchCase: false, ReplaceWith: " В ВЛ " + u + " " + line + " ", Replace: WdReplace.wdReplaceAll);
+		}
+
+
 
 		protected void replaceSpaces(Document doc) {
 			int count=0;
 			doc.Range().Find.Execute(FindText: "^w", MatchCase: false, ReplaceWith: " ", Replace: WdReplace.wdReplaceAll);
 			doc.Range().Find.Execute(FindText: "^w.", MatchCase: false, ReplaceWith: ".", Replace: WdReplace.wdReplaceAll);
 			doc.Range().Find.Execute(FindText: "^w^p", MatchCase: false, ReplaceWith: "^p", Replace: WdReplace.wdReplaceAll);
+			doc.Range().Find.Execute(FindText: "–", MatchCase: false, ReplaceWith: "-", Replace: WdReplace.wdReplaceAll);
 			doc.Range().Find.Execute(FindText: " -", MatchCase: false, ReplaceWith: "-", Replace: WdReplace.wdReplaceAll);
 			doc.Range().Find.Execute(FindText: "- ", MatchCase: false, ReplaceWith: "-", Replace: WdReplace.wdReplaceAll);
+			doc.Range().Find.Execute(FindText: "-", MatchCase: false, ReplaceWith: "–", Replace: WdReplace.wdReplaceAll);
+			doc.Range().Find.Execute(FindText: "« ", MatchCase: false, ReplaceWith: "«", Replace: WdReplace.wdReplaceAll);
+			doc.Range().Find.Execute(FindText: " »", MatchCase: false, ReplaceWith: "»", Replace: WdReplace.wdReplaceAll);
+			
+			/*doc.Range().Find.Execute(FindText: "ГЭС- ", MatchCase: false, ReplaceWith: "ГЭС -~", Replace: WdReplace.wdReplaceAll);
+			doc.Range().Find.Execute(FindText: "-~", MatchCase: false, ReplaceWith: "- ", Replace: WdReplace.wdReplaceAll);*/
+
 			doc.Range().Find.Execute(FindText: "-110 кВ", MatchCase: false, ReplaceWith: " 110", Replace: WdReplace.wdReplaceAll);
 			doc.Range().Find.Execute(FindText: "-220 кВ", MatchCase: false, ReplaceWith: " 220", Replace: WdReplace.wdReplaceAll);
 			doc.Range().Find.Execute(FindText: "-500 кВ", MatchCase: false, ReplaceWith: " 500", Replace: WdReplace.wdReplaceAll);
 			doc.Range().Find.Execute(FindText: "-110", MatchCase: false, ReplaceWith: " 110", Replace: WdReplace.wdReplaceAll);
 			doc.Range().Find.Execute(FindText: "-220", MatchCase: false, ReplaceWith: " 220", Replace: WdReplace.wdReplaceAll);
 			doc.Range().Find.Execute(FindText: "-500", MatchCase: false, ReplaceWith: " 500", Replace: WdReplace.wdReplaceAll);
+			
 			doc.Range().Find.Execute(FindText: "Иж-", MatchCase: false, ReplaceWith: "Ижевск ", Replace: WdReplace.wdReplaceAll);
+			doc.Range().Find.Execute(FindText: "Иж ", MatchCase: false, ReplaceWith: "Ижевск ", Replace: WdReplace.wdReplaceAll);
 			doc.Range().Find.Execute(FindText: "Ижевск-", MatchCase: false, ReplaceWith: "Ижевск ", Replace: WdReplace.wdReplaceAll);
 			doc.Range().Find.Execute(FindText: "Водозабор-", MatchCase: false, ReplaceWith: "Водозабор ", Replace: WdReplace.wdReplaceAll);
 			doc.Range().Find.Execute(FindText: "Каучук-", MatchCase: false, ReplaceWith: "Каучук ", Replace: WdReplace.wdReplaceAll);
 			doc.Range().Find.Execute(FindText: "КШТ-", MatchCase: false, ReplaceWith: "КШТ ", Replace: WdReplace.wdReplaceAll);
 
+
+			/*replaceVVL("КШТ 1", "110");
+			replaceVVL("КШТ 2", "110");
+			replaceVVL("Светлая", "110");
+			replaceVVL("Ивановка", "110");
+			replaceVVL("Каучук", "110");
+			//replaceVVL("Светлая", "110");
+			replaceVVL("ЧаТЭЦ", "110");
+			replaceVVL("Березовка", "110");
+			replaceVVL("Дубовая", "110");
+			replaceVVL("Водозабор 1", "110");
+			replaceVVL("Водозабор 2", "110");
+
+			replaceVVL("Карманово", "500");
+			replaceVVL("Емелино", "500");
+			replaceVVL("Вятка", "500");
+
+			replaceVVL("Ижевск 1", "220");
+			replaceVVL("Ижевск 2", "220");
+			replaceVVL("Каучук 1", "220");
+			replaceVVL("Каучук 2", "220");
+			//replaceVVL("Светлая", "220");*/
 			for (int i=0; i < 20; i++) {
 				doc.Range().Find.Execute(FindText: "^p^p", MatchCase: false, ReplaceWith: "^p", Replace: WdReplace.wdReplaceAll);
+			}
+		}
+
+		protected string getObjectName(string findStr, string text) {
+			text = text.Remove(0, text.IndexOf(findStr) + findStr.Length);
+			if (text.IndexOf("автомат") >= 0)
+				return "";
+			if (text.IndexOf("рубильник") >= 0)
+				return "";
+			text = text + ".";
+			text = text.Replace(" в яч", ".");
+			int i=text.IndexOf(".");
+			if (i >= 0) {
+				text = text.Substring(0, i);
+			}
+			return text;
+		}
+
+		protected String findTurn(Document doc) {
+			string[] onStrs={"Отключить ", "Проверить включенное положение "};
+			string[] offStrs= { "Включить ", "Проверить отключенное положение ", "Проверить отсутствие напряжения на " };
+			List<String> resOn=new List<string>();
+			List<String> resOff=new List<string>();			
+			foreach (Paragraph p in doc.Range().Paragraphs) {
+				string text=p.Range.Text;
+				foreach (string onStr in onStrs) {
+					if (text.IndexOf(onStr) >= 0) {
+						string obj=getObjectName(onStr, text);
+						if (obj.Length > 0) {
+							if (!resOff.Contains(obj) && !resOn.Contains(obj))
+								resOn.Add(obj);
+						}
+					}
+				}
+
+				foreach (string offStr in offStrs) {
+					if (text.IndexOf(offStr) >= 0) {
+						string obj=getObjectName(offStr, text);
+						if (obj.Length > 0) {
+							if (!resOn.Contains(obj) && !resOff.Contains(obj))
+								resOff.Add(obj);
+						}
+					}
+				}
+			}
+			string res="";
+			if (resOn.Count > 0 && resOff.Count > 0) {
+				res= "Включены: " + String.Join(", ", resOn.ToArray()) + "\nОтключены: " + String.Join(", ", resOff.ToArray()) + "\n";
+			}
+			return res;
+		}
+
+		protected void makeSchema(Document doc) {
+			string schema=findTurn(doc);
+
+			if (schema.Length > 0) {
+				foreach (Paragraph p in doc.Range().Paragraphs) {
+					string text=p.Range.Text;
+					if (text.IndexOf("Исходная схема станции") == 0) {
+						p.Range.Select();
+						app.Selection.TypeParagraph();
+						app.Selection.Font.Bold = 0;
+						app.Selection.Font.Underline = 0;
+						app.Selection.Font.Italic = 1;
+						app.Selection.ParagraphFormat.Alignment = WdParagraphAlignment.wdAlignParagraphJustify;
+						app.Selection.Font.Size = 12;
+						app.Selection.TypeText(schema);
+						break;
+					}
+				}
 			}
 		}
 
@@ -453,3 +563,4 @@ namespace Office.Shared
 		}
 	}
 }
+
