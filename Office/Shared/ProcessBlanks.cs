@@ -463,7 +463,6 @@ namespace Office.Shared
 				return "";
 			text = text.Replace("\n", ".\n");
 			text = text.Replace("(", ".");
-			text = text.Replace("«", ".");
 			text = text.Replace(",", ".");
 			text = text.Replace(" в", ".");
 			text = text.Trim();
