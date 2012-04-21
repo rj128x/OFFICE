@@ -461,8 +461,12 @@ namespace Office.Shared
 				return "";
 			if (text.IndexOf("рубильник") >= 0)
 				return "";
-			text = text + ".";
-			text = text.Replace(" в яч", ".");
+			text = text.Replace("\n", ".\n");
+			text = text.Replace("(", ".");
+			text = text.Replace("«", ".");
+			text = text.Replace(",", ".");
+			text = text.Replace(" в", ".");
+			text = text.Trim();
 			int i=text.IndexOf(".");
 			if (i >= 0) {
 				text = text.Substring(0, i);
