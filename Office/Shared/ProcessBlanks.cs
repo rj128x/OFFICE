@@ -406,23 +406,25 @@ namespace Office.Shared
 			doc.Range().Find.Execute(FindText: "-", MatchCase: false, ReplaceWith: "–", Replace: WdReplace.wdReplaceAll);
 			doc.Range().Find.Execute(FindText: "« ", MatchCase: false, ReplaceWith: "«", Replace: WdReplace.wdReplaceAll);
 			doc.Range().Find.Execute(FindText: " »", MatchCase: false, ReplaceWith: "»", Replace: WdReplace.wdReplaceAll);
-			
-			/*doc.Range().Find.Execute(FindText: "ГЭС- ", MatchCase: false, ReplaceWith: "ГЭС -~", Replace: WdReplace.wdReplaceAll);
-			doc.Range().Find.Execute(FindText: "-~", MatchCase: false, ReplaceWith: "- ", Replace: WdReplace.wdReplaceAll);*/
 
-			doc.Range().Find.Execute(FindText: "-110 кВ", MatchCase: false, ReplaceWith: " 110", Replace: WdReplace.wdReplaceAll);
-			doc.Range().Find.Execute(FindText: "-220 кВ", MatchCase: false, ReplaceWith: " 220", Replace: WdReplace.wdReplaceAll);
-			doc.Range().Find.Execute(FindText: "-500 кВ", MatchCase: false, ReplaceWith: " 500", Replace: WdReplace.wdReplaceAll);
-			doc.Range().Find.Execute(FindText: "-110", MatchCase: false, ReplaceWith: " 110", Replace: WdReplace.wdReplaceAll);
-			doc.Range().Find.Execute(FindText: "-220", MatchCase: false, ReplaceWith: " 220", Replace: WdReplace.wdReplaceAll);
-			doc.Range().Find.Execute(FindText: "-500", MatchCase: false, ReplaceWith: " 500", Replace: WdReplace.wdReplaceAll);
-			
-			doc.Range().Find.Execute(FindText: "Иж-", MatchCase: false, ReplaceWith: "Ижевск ", Replace: WdReplace.wdReplaceAll);
+			doc.Range().Find.Execute(FindText: " ГЭС– ", MatchCase: false, ReplaceWith: " ГЭС –~", Replace: WdReplace.wdReplaceAll);
+			doc.Range().Find.Execute(FindText: "–~", MatchCase: false, ReplaceWith: "– ", Replace: WdReplace.wdReplaceAll);
+
+			doc.Range().Find.Execute(FindText: "–110 кВ", MatchCase: false, ReplaceWith: " 110", Replace: WdReplace.wdReplaceAll);
+			doc.Range().Find.Execute(FindText: "–220 кВ", MatchCase: false, ReplaceWith: " 220", Replace: WdReplace.wdReplaceAll);
+			doc.Range().Find.Execute(FindText: "–500 кВ", MatchCase: false, ReplaceWith: " 500", Replace: WdReplace.wdReplaceAll);
+			doc.Range().Find.Execute(FindText: "–13,8 кВ", MatchCase: false, ReplaceWith: " 13,8", Replace: WdReplace.wdReplaceAll);
+			doc.Range().Find.Execute(FindText: "–110", MatchCase: false, ReplaceWith: " 110", Replace: WdReplace.wdReplaceAll);
+			doc.Range().Find.Execute(FindText: "–220", MatchCase: false, ReplaceWith: " 220", Replace: WdReplace.wdReplaceAll);
+			doc.Range().Find.Execute(FindText: "–500", MatchCase: false, ReplaceWith: " 500", Replace: WdReplace.wdReplaceAll);
+			doc.Range().Find.Execute(FindText: "–13,8", MatchCase: false, ReplaceWith: " 13,8", Replace: WdReplace.wdReplaceAll);
+
+			doc.Range().Find.Execute(FindText: "Иж–", MatchCase: false, ReplaceWith: "Ижевск ", Replace: WdReplace.wdReplaceAll);
 			doc.Range().Find.Execute(FindText: "Иж ", MatchCase: false, ReplaceWith: "Ижевск ", Replace: WdReplace.wdReplaceAll);
-			doc.Range().Find.Execute(FindText: "Ижевск-", MatchCase: false, ReplaceWith: "Ижевск ", Replace: WdReplace.wdReplaceAll);
-			doc.Range().Find.Execute(FindText: "Водозабор-", MatchCase: false, ReplaceWith: "Водозабор ", Replace: WdReplace.wdReplaceAll);
-			doc.Range().Find.Execute(FindText: "Каучук-", MatchCase: false, ReplaceWith: "Каучук ", Replace: WdReplace.wdReplaceAll);
-			doc.Range().Find.Execute(FindText: "КШТ-", MatchCase: false, ReplaceWith: "КШТ ", Replace: WdReplace.wdReplaceAll);
+			doc.Range().Find.Execute(FindText: "Ижевск–", MatchCase: false, ReplaceWith: "Ижевск ", Replace: WdReplace.wdReplaceAll);
+			doc.Range().Find.Execute(FindText: "Водозабор–", MatchCase: false, ReplaceWith: "Водозабор ", Replace: WdReplace.wdReplaceAll);
+			doc.Range().Find.Execute(FindText: "Каучук–", MatchCase: false, ReplaceWith: "Каучук ", Replace: WdReplace.wdReplaceAll);
+			doc.Range().Find.Execute(FindText: "КШТ–", MatchCase: false, ReplaceWith: "КШТ ", Replace: WdReplace.wdReplaceAll);
 
 
 			/*replaceVVL("КШТ 1", "110");
@@ -461,21 +463,37 @@ namespace Office.Shared
 				return "";
 			if (text.IndexOf("рубильник") >= 0)
 				return "";
+			if (text.IndexOf("тумблер") >= 0)
+				return "";
+			if (text.IndexOf("переключат") >= 0)
+				return "";
+			if (text.IndexOf("ДФЗ") >= 0)
+				return "";
+			if (text.IndexOf("телесигнализац") >= 0)
+				return "";
 			text = text.Replace("\n", ".\n");
 			text = text.Replace("(", ".");
+			text = text.Replace("13,8", "13_8");
+			text = text.Replace("5,6", "5_6");
 			text = text.Replace(",", ".");
-			text = text.Replace(" в", ".");
+			text = text.Replace(" в ", ".");
+			text = text.Replace(" и ", ".");
+			text = text.Replace(" с ", ".");
+			text = text.Replace(" яч.", " яч_");
 			text = text.Trim();
-			int i=text.IndexOf(".");
+			int i=text.IndexOf(".");			
 			if (i >= 0) {
 				text = text.Substring(0, i);
 			}
+			text = text.Replace("13_8", "13,8");
+			text = text.Replace("5_6", "5,6");
+			text = text.Replace("яч_", "яч.");
 			return text;
 		}
 
 		protected String findTurn(Document doc) {
 			string[] onStrs={"Отключить ", "Проверить включенное положение "};
-			string[] offStrs= { "Включить ", "Проверить отключенное положение ", "Проверить отсутствие напряжения на " };
+			string[] offStrs= { "Включить ", "Проверить отключенное положение "};
 			List<String> resOn=new List<string>();
 			List<String> resOff=new List<string>();			
 			foreach (Paragraph p in doc.Range().Paragraphs) {
