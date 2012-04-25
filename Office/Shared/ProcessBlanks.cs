@@ -210,7 +210,7 @@ namespace Office.Shared
 				//replaceSpaces(last);
 
 				replaceSpaces(doc);
-				makeSchema(doc);
+				//makeSchema(doc);
 				addFooter(fileName, doc, true);
 				podpis(doc, 7);
 

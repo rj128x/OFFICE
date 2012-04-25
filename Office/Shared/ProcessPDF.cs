@@ -29,7 +29,7 @@ namespace Office.Shared
 			FileInfo fileInfo=new FileInfo(fileName);
 			Logger.log(fileName);
 			try{
-					string newFileName=fileName.Replace(path, pathPDF);
+					string newFileName=fileName.Replace(path, pathPDF).Replace(".docx", ".pdf").Replace(".doc", ".pdf");
 					string dir=fileInfo.Directory.FullName.Replace(path, pathPDF);
 					Directory.CreateDirectory(dir);
 					if (File.Exists(newFileName)) {
