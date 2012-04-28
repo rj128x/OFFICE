@@ -58,11 +58,15 @@ namespace Office.Shared
 
 					File.Copy(fileName, newFileName);
 					createTipBlank(newFileName, createPDF, newFileNamePDF);
-					return true;
 				}
+			} catch (Exception e) {
+				Logger.log("ERROR " + e.ToString());
+			}
+
+			try {
 				if (createCurrent) {
 					string newFileName=fileName.Replace(path, pathCurrent);
-					string dir=fileInfo.Directory.FullName.Replace(path, pathTip);
+					string dir=fileInfo.Directory.FullName.Replace(path, pathCurrent);
 					Directory.CreateDirectory(dir);
 					if (File.Exists(newFileName)) {
 						File.Delete(newFileName);
@@ -70,11 +74,11 @@ namespace Office.Shared
 					Logger.log(newFileName);
 					File.Copy(fileName, newFileName);
 					createBlank(newFileName);
-					return true;
 				}
 			} catch (Exception e) {
 				Logger.log("ERROR " + e.ToString());
 			}
+
 			return true;
 
 		}

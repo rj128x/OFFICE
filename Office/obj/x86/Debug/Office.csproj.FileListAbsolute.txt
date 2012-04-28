@@ -6,6 +6,9 @@ D:\vs2010\Office\Office\obj\x86\Debug\GenerateResource.read.1.tlog
 D:\vs2010\Office\Office\obj\x86\Debug\GenerateResource.write.1.tlog
 D:\vs2010\Office\Office\obj\x86\Debug\Office.exe
 D:\vs2010\Office\Office\obj\x86\Debug\Office.pdb
-D:\vs2010\Office\Office\obj\x86\Debug\Office.BlanksForm.resources
 D:\vs2010\Office\Office\obj\x86\Debug\Office.MenuForm.resources
 D:\vs2010\Office\Office\obj\x86\Debug\Office.ListsZnakForm.resources
+D:\vs2010\OFFICE\Office\bin\Debug\Office.exe.config
+D:\vs2010\OFFICE\Office\obj\x86\Debug\Office.PDFForm.resources
+D:\vs2010\OFFICE\Office\obj\x86\Debug\Office.CreatePDFForm.resources
+D:\vs2010\OFFICE\Office\obj\x86\Debug\Office.ProtokolForm.resources
