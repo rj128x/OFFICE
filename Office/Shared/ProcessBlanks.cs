@@ -67,6 +67,7 @@ namespace Office.Shared
 				if (createCurrent) {
 					string newFileName=fileName.Replace(path, pathCurrent);
 					string dir=fileInfo.Directory.FullName.Replace(path, pathCurrent);
+					Logger.log(dir);
 					Directory.CreateDirectory(dir);
 					if (File.Exists(newFileName)) {
 						File.Delete(newFileName);

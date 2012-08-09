@@ -46,10 +46,10 @@ namespace Office.Shared
 
 				ws.Cells[3][14].Value = name;
 				ws.Cells[3][16].Value = dolzn;
-				ws.Cells[3][32].Value = String.Format("{1} ({0})",dolzn,categ);
+				ws.Cells[3][30].Value = String.Format("{1} ({0})",dolzn,categ);
 				/*ws.Cells[3][18].Value = group;
 				ws.Cells[3][29].Value = group;*/
-				ws.Cells[9][46].Value = String.Format("/{0}/", shortName);
+				ws.Cells[9][44].Value = String.Format("/{0}/", shortName);
 
 				System.Windows.Forms.Application.DoEvents();
 			}
